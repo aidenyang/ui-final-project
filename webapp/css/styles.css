@@ -1,0 +1,74 @@
+#logo{
+    max-width:10%; /* you can use % */
+    height: auto;
+}
+
+.start{
+  padding: 50px 15px;
+  text-align: left;
+}
+
+.col-lg-9 {
+	padding-left: 0px;
+}
+
+.panel-horizontal .panel-heading {
+       float: left;
+       width: 19%;
+       padding-left: 15px;
+
+       border-right: 5px;
+       border-top-right-radius: 0;
+       margin-bottom: 0;
+}
+
+.panel-horizontal .panel-body {
+       float: right;
+       margin: 0 0 15px 0;
+       padding-bottom: 0;
+       width: 80%;
+       padding: 0;
+}
+
+.article_modal {
+	float: right;
+	margin-top: 15px;
+}
+
+.ratings {
+	margin-top: 15px;
+}
+
+.userId {
+    display: none;
+}
+
+#prototype, #rating_prototype {
+    display: none;
+}
+
+.nl {
+    visibility: hidden;
+}
+
+.chat-panel {
+	width:	300px;
+	height: 600px;
+}
+
+.panel-body {
+
+}
+
+#source {
+	font-weight: bold;
+}
+
+#author {
+	float: left;
+	color: gray;
+}
+
+#art_image {
+	vertical-align: middle;
+}

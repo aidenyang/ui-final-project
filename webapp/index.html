@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Commentator</title>
+	<meta charset="utf-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+
+    <!-- Custom CSS -->
+    <link href="css/sb-admin-2.css" rel="stylesheet">
+</head>
+
+<body>
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  		<div class="container">
+    		<div class="navbar-header">
+      			<a class="navbar-brand" href="#">
+        			<img id="logo" src="images/movie-reel.jpg" class="img-responsive img-circle" alt="Responsive image">
+      			</a>
+    		</div>
+    		
+  		</div>
+	</nav>
+
+	<div class="container">
+    
+    <div class="row start">
+
+      <div class="col-lg-9">
+        <h1 id="header">Press "Surprise Me" for random comments from The New York Times!</h1>
+        <!-- end col-->
+      </div>
+
+
+      <div class="col-lg-3">
+          
+        <div class="chat-panel panel panel-default ratings ratings affix">
+            <div class="panel-heading">
+                <i class="fa fa-comments fa-fw"></i>
+                Commenter Ratings
+                <div class="btn-group pull-right">
+                    <button id="clear" type="button" class="btn btn-xs btn-primary">Clear</button>
+                </div>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <ul class="chat">
+                  <li class="clearfix">
+                        <div class="well">
+                          <div class="row">
+                            <div class="col-lg-1">
+                            Educated
+                          </div>
+
+                          <div class="col-lg-3 col-lg-offset-2">
+                            <div id = "bar" class="progress progress-striped">
+                                      <div class="progress-bar progress-bar-success" role="progressbar" style="width: 100%">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-lg-1">
+                                Smart
+                              </div>
+                              <div class="col-lg-3 col-lg-offset-1">
+                                    <div id = "bar" class="progress">
+                                      <div class="progress-bar progress-bar-success" role="progressbar" style="width: 100%">
+                                      </div>
+                                  </div>
+                              </div>
+
+                          </div>
+                          <div class="row">
+                            <div class="col-lg-1">
+                            Negative
+                          </div>
+
+                          <div class="col-lg-3 col-lg-offset-2">
+                            <div id = "bar" class="progress">
+                                      <div class="progress-bar progress-bar-warning" role="progressbar" style="width: 100%">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-lg-1">
+                                Cynical
+                              </div>
+                              <div class="col-lg-3 col-lg-offset-1">
+                                    <div id = "bar" class="progress">
+                                      <div class="progress-bar progress-bar-info" role="progressbar" style="width: 100%">
+                                      </div>
+                                  </div>
+                              </div>
+
+                          </div>
+                          <div class="row">
+                            <div class="col-lg-1">
+                            Hateful
+                          </div>
+
+                          <div class="col-lg-3 col-lg-offset-2">
+                            <div id = "bar" class="progress">
+                                      <div class="progress-bar progress-bar-danger" role="progressbar" style="width: 100%">
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                        </div>
+                    </li>
+
+                    <li id="rating_prototype" class="clearfix">
+                        <div class="chat-body clearfix">
+                            <div class="header">
+                                <strong id="rating-name" class="primary-font">Commentator</strong>
+                                <div id="rating-major" class="pull-right">Educated</div>
+                                <div id="r1" >r1</div>
+                            </div>
+                            <p class="nl">new line</p>
+                              <div id="rating-scores" class="progress">
+                                <div class="progress-bar progress-bar-success progress-bar-striped" style="width: 20%">
+
+                                </div>
+                                <div class="progress-bar progress-bar-success" style="width: 20%">
+
+                                </div>
+                                <div class="progress-bar progress-bar-info" style="width: 20%">
+
+                                </div>
+                                <div class="progress-bar progress-bar-warning" style="width: 20%">
+
+                                </div>
+                                <div class="progress-bar progress-bar-danger" style="width: 20%">
+                                </div>
+                              </div>
+                              <div class="footer">
+                                1 vote
+                              </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.panel-body -->
+            
+            <!-- panel -->
+        </div>
+
+        <!-- end col-->
+      </div>
+
+    <!-- end row-->
+    </div>
+  <!-- end container-->
+  </div>
+
+  <!-- start comments container -->
+  <div id="comments" class="container">
+
+    <!-- start comment row -->
+    <div id="prototype" class="row">
+      <div class="col-lg-9 panel panel-default panel-horizontal">
+
+        <div class="panel-heading well">
+          <h3><a id="name" href="#">Commenter</a> </h3>
+          <p class="userId">userId</p>
+          <h4>Location<p><small>Post_Time</small></p></h4>
+              <!-- Rate button -->
+              <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle center-block" data-toggle="dropdown" aria-expanded="false">
+                  Rate <span class="caret"></span>
+                </button>
+                <ul id="rateValue" class="dropdown-menu" role="menu">
+                  <li><a href="#">Educated</a></li>
+                  <li><a href="#">Smart</a></li>
+                  <li><a href="#">Cynical</a></li>
+                  <li><a href="#">Negative</a></li>
+                  <li><a href="#">Hateful</a></li>
+                </ul>
+              </div>
+              </p>
+        <!-- end heading-->
+        </div>
+
+      <div class="panel-body">
+        <button id="article" type="button" class="btn btn-default btn-lg article_modal">
+            <span class="glyphicon glyphicon-font" aria-hidden="true"></span>
+          </button>
+        <h3><a id= "url" href="http://www.nytimes.com/2013/11/28/world/asia/airspace-claim-forces-us-to-flesh-out-china-strategy.html" target="_blank">Article_Title</a></h3>
+        <!-- Article Button -->
+          
+        <p class="lead">Comment_Body</p>
+      <!-- end body-->
+      </div>
+    <!-- end col-->
+    </div>
+   <!-- end row-->
+   </div>
+  <!-- end container-->
+  </div>
+
+<!-- modal-->
+    <div id="myModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 id="headline" class="modal-title">Modal title</h4>
+      </div>
+      <div id="body"class="modal-body">
+        <p></p>
+        <div id="main"></div>
+      </div>
+      <div class="modal-footer">
+        <div id="author"></div>
+        <em id="source"></em>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+	<!-- jQuery Version 1.11.0 -->
+    <script src="js/jquery-1.11.0.js"></script>
+	<!-- App Logic -->    
+    <script src="js/comments.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
+
