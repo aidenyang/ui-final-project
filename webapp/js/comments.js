@@ -60,11 +60,15 @@ var main = function() {
 	// 	updateRatings(name, rating, self);
 	// });
 
-	// $("#comments").on('click', '.article_modal', function(event) {
-	// 	var title = $(this).siblings()[0];
-	// 	var articleUrl = title.innerHTML.split("\"")[1];
-	// 	getArticle(articleUrl);
-	// });
+	$("#comments").on('click', '.add', function(event) {
+		var title = "test";
+
+		addToQueue(title);
+	});
+}
+
+var addToQueue = function(title) {
+	
 }
 
 var getLatestMovies = function(offset) {
@@ -76,6 +80,7 @@ var getLatestMovies = function(offset) {
 		'dataType': 'jsonp',
 		'success': function(data, textStats, XMLHttpRequest) {
 			$.merge(movies, data.results);
+			console.log(movies);
 		}
 	});
 

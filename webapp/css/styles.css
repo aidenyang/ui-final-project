@@ -3,6 +3,10 @@
     height: auto;
 }
 
+.pop {
+  margin-top: 8px;
+}
+
 .start{
   padding: 50px 15px;
   text-align: left;
@@ -12,12 +16,45 @@
 	padding-left: 0px;
 }
 
+#queue {
+  margin-top: 80px;
+  background-color: rgb(216,216,216);  
+  height: 140px;
+  border: 2px solid gray;
+  border-radius: 3px;
+}
+
+.qimage {
+  width: 80px;
+  height: 80px;
+}
+
+.qtext {
+  text-align: center;
+  font-size: 80%;
+}
+
+.qitem {
+  background-color: white;
+  display: inline-block;
+  height: 80%;
+  top: 10%;
+  position: relative;
+  margin-left: 15px;
+  width: 80px;
+  cursor: pointer;
+}
+
+.qitem:hover {
+  background-color: gray;
+}
+
 .panel-horizontal .panel-heading {
        float: left;
        width: 19%;
        padding-left: 15px;
 
-       border-right: 5px;
+       border-right: 15px;
        border-top-right-radius: 0;
        margin-bottom: 0;
 }
