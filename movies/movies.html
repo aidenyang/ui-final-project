@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="movies.css">
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="movies.js"></script>
+        <title>Movie Raider</title>
+    </head>
+    <body>
+    	<h1><span style="color: #0062da; font-weight: bold; font-size: 110%">Movie Raider</span></h1>
+        <div class="results">
+            <div class="searchRow">
+                <label>Search:</label>
+                <div class="input-group">
+                    <input id = "search" type="text" class="form-control" placeholder="Keyword(s) e.g. 'sunset'">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" id = "searchButton" onclick="searchMovies();">Go!</button>
+                    </span>
+                </div>
+             </div>
+             <div id="movies">
+            </div>
+
+        </div>
+       
+    </body>
+</html>
