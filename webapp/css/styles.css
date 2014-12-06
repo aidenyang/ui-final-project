@@ -34,6 +34,10 @@
   font-size: 80%;
 }
 
+.movie {
+  width: 75%;
+}
+
 .qitem {
   background-color: white;
   display: inline-block;

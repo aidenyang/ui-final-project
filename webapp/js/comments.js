@@ -60,6 +60,18 @@ var main = function() {
 	// 	updateRatings(name, rating, self);
 	// });
 
+	$("#search").click(function() {
+		console.log("here1111");
+		searchMovies();	
+	});
+
+	$('#inp').keypress(function(e){
+     	var code = (e.keyCode ? e.keyCode : e.which);
+      	if(code == 13) {
+        searchMovies()
+      }
+	});
+
 	$("#mostpop").click(function() {
 		addToQueue();	
 	});
@@ -642,8 +654,9 @@ function getMovies() {
 //   });
 // }
 
-function searchMovies() {
-  var keyword = $('#search').val();
+var searchMovies = function() {
+	
+  var keyword = $('#inp').val();
   console.log('keyword');
   console.log(keyword);
   var url = 'http://api.nytimes.com/svc/movies/v2/reviews/search.jsonp?query='+keyword+'&api-key=b5c06f77f4bd3bc6d762aaf3259089c9:11:67621633';
@@ -655,6 +668,7 @@ function searchMovies() {
       'success' : function(data, textStats, XMLHttpRequest) {
         movies.length = 0;
         $.merge(movies, data.results);
+        $("#movies").empty();
         getMovies();
         console.log(movies);
       }
@@ -662,6 +676,7 @@ function searchMovies() {
 }
 
 function getRT(movie_name, apikey, j){
+
   var moviesSearchUrl = baseUrl + '/movies.json?apikey=' + apikey;
   $.ajax({
     'type' : "GET", 
@@ -745,10 +760,10 @@ function getRT(movie_name, apikey, j){
         '<div class="panel panel-default">'+
           '<div class="panel-body">'+
             '<div class="row">'+
-              '<div class="col-md-1">'+
+              '<div class="col-md-2">'+
                 '<img src='+image+' alt="Movie Poster" height="125" width="100">'+
               '</div>'+
-              '<div class="col-md-7">'+
+              '<div class="col-md-10">'+
                 '<p><span style="font-size: 16px; font-weight: bold;">'+ movie_name +' </span><span style="color: #707070; font-size: 12px">'+year+'</span>'+
                 '<br><b>MPA Rating: </b>'+rating1+'<b> Runtime: </b>'+runtime1+
                 '<br><b>Synopsis: </b>'+synopsis1+
