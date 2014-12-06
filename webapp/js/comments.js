@@ -655,8 +655,8 @@ function getMovies() {
 // }
 
 var searchMovies = function() {
-	
-  var keyword = $('#inp').val();
+
+  var keyword = $('#search').val();
   console.log('keyword');
   console.log(keyword);
   var url = 'http://api.nytimes.com/svc/movies/v2/reviews/search.jsonp?query='+keyword+'&api-key=b5c06f77f4bd3bc6d762aaf3259089c9:11:67621633';
