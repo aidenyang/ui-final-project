@@ -20,8 +20,6 @@ var moviesAdded = [];
 
 var main = function() {
 
-	getLatestMovies(0);
-
 	// $("#random").click(function(){
 	// 	$("#comments").empty();
 	// 	$("#header").text("Random Comments");
@@ -62,37 +60,21 @@ var main = function() {
 	// 	updateRatings(name, rating, self);
 	// });
 
-	$("#search").click(function() {
-		console.log("here1111");
-		searchMovies();	
-	});
-
-	$('#inp').keypress(function(e){
-     	var code = (e.keyCode ? e.keyCode : e.which);
-      	if(code == 13) {
-        searchMovies()
-      }
-	});
-
-	// $("#mostpop").click(function() {
-	// 	addToQueue();	
+	// $("#search").click(function() {
+	// 	console.log("here1111");
+	// 	searchMovies();	
 	// });
 
-	$("#movies").on('click', '.pop', function(event) {
+	// $('#inp').keypress(function(e){
+ //     	var code = (e.keyCode ? e.keyCode : e.which);
+ //      	if(code == 13) {
+ //        searchMovies()
+ //      }
+	// });
 
-		var count = $("#queue").children().length;
-
-		if(count>=10) {
-			//show modal
-		}
-		else {
-			console.log("add button clicked");
-			var title = "test";
-			var imageUrl = "test";
-		
-			addToQueue(title, imageUrl);
-		}
-
+	$("#mostpop").click(function() {
+		$("#movies").empty();
+		// getLatestMovies(0);	
 	});
 }
 
@@ -130,19 +112,19 @@ var addToQueue = function(index) {
 	}
 }
 
-var getLatestMovies = function(offset) {
-	var action = "http://api.nytimes.com/svc/movies/v2/reviews/picks.jsonp?order=by-opening-date&offset="+offset;
+// var getLatestMovies = function(offset) {
+// 	var action = "http://api.nytimes.com/svc/movies/v2/reviews/picks.jsonp?order=by-opening-date&offset="+offset;
 
-	$.ajax({
-		'url' : action,
-		'data': movkey,
-		'dataType': 'jsonp',
-		'success': function(data, textStats, XMLHttpRequest) {
-			$.merge(movies, data.results);
-		}
-	});
+// 	$.ajax({
+// 		'url' : action,
+// 		'data': movkey,
+// 		'dataType': 'jsonp',
+// 		'success': function(data, textStats, XMLHttpRequest) {
+// 			$.merge(movies, data.results);
+// 		}
+// 	});
 
-}
+// }
 
 
 var updateRatings = function(name, rating, user) {
