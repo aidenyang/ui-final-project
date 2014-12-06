@@ -98,38 +98,36 @@ var main = function() {
 
 var addToQueue = function(index) {
 
-	if(moviesAdded.indexOf(mObj[index])==-1) {
-		//save movie added
-      	moviesAdded[moviesAdded.length]=mObj[index];
-
-		var movie = mObj[index]
-	var title = movie.movieName;
-	var imageUrl = movie.img;
-
-	var item="";
-	item += "<div class=\"qitem\">";
-	item += "<img class=\"qimage\" src=\""+imageUrl+"\" \/>";
-	item += "<div class=\"qtext\">";
-	item += title;
-	item += "<\/div>";
-	item += "<\/div>";
-
-	$("#queue").append(item);
-
+	if(moviesAdded.length+1 > 11) {
+		alert("Maximum number of movies allowed in queue is 11!")
 	}
 
-	//parameter index i
-if(typeof(Storage) !== "undefined")
-  {
-    localStorage.setItem("movies", moviesAdded);
-  }
-  else 
-  {
-    console.log("Browser does not support storage");
-  }
-	
+	if(moviesAdded.indexOf(mObj[index])==-1 && moviesAdded.length<11) {
+		//save movie added
+	    moviesAdded[moviesAdded.length]=mObj[index];
 
-	
+		var movie = mObj[index]
+		var title = movie.movieName;
+		var imageUrl = movie.img;
+
+		var item="";
+		item += "<div class=\"qitem\">";
+		item += "<img class=\"qimage\" src=\""+imageUrl+"\" \/>";
+		item += "<div class=\"qtext\">";
+		item += title;
+		item += "<\/div>";
+		item += "<\/div>";
+
+		$("#queue").append(item);
+
+		//parameter index i
+		if(typeof(Storage) !== "undefined") {
+			localStorage.setItem("movies", moviesAdded);
+		}
+		else {
+			console.log("Browser does not support storage");
+		}
+	}
 }
 
 var getLatestMovies = function(offset) {
