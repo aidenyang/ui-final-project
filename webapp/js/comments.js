@@ -16,6 +16,8 @@ var movkey = {
 
 var movies = [];
 
+var moviesAdded = [];
+
 var main = function() {
 
 	getLatestMovies(0);
@@ -72,9 +74,9 @@ var main = function() {
       }
 	});
 
-	$("#mostpop").click(function() {
-		addToQueue();	
-	});
+	// $("#mostpop").click(function() {
+	// 	addToQueue();	
+	// });
 
 	$("#movies").on('click', '.pop', function(event) {
 
@@ -94,8 +96,14 @@ var main = function() {
 	});
 }
 
-var addToQueue = function(title, imageUrl) {
-	imageUrl="images/movie-reel.jpg"
+var addToQueue = function(index) {
+
+
+
+		var movie = mObj[index]
+	var title = movie.movieName;
+	var imageUrl = movie.img;
+
 	var item="";
 	item += "<div class=\"qitem\">";
 	item += "<img class=\"qimage\" src=\""+imageUrl+"\" \/>";
@@ -105,6 +113,8 @@ var addToQueue = function(title, imageUrl) {
 	item += "<\/div>";
 
 	$("#queue").append(item);
+
+	
 }
 
 var getLatestMovies = function(offset) {
@@ -785,10 +795,14 @@ function getRT(movie_name, apikey, j){
                 '</div>'+
               '</div>'+
             '</div>'+
-            '<button type="button" class="btn btn-info" id="clearB" onclick="addtoQueue();">Add</button>'
+            '<button type="button" class="btn btn-info" id="clearB" onclick="addToQueue('+j+');">Add</button>'
           '</div>'+
         '</div>'+
       '</div>';
+
+      //save movie added
+      moviesAdded[moviesAdded.length]=j;
+
       if(!firstLoaded) {
         $("#movies").empty();
         firstLoaded = true;
