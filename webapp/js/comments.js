@@ -18,9 +18,29 @@ var movies = [];
 
 var moviesAdded = [];
 
+
+
 var main = function() {
 
+
 	getLatestMovies(0);
+	//parameter index i
+	if(typeof(Storage) !== "undefined")
+	  {
+	    if (localStorage.getItem("queue") !== null) {
+	    	var queue = localStorage.getItem("queue");
+	    	var i;
+	    	for(i=0; i<queue.length; i++) {
+	    		addToQueue(queue[i]);
+	    	}
+		}
+	  }
+	  else 
+	  {
+	    console.log("Browser does not support storage");
+	  }
+
+	$(document).ready(main);
 
 	// $("#random").click(function(){
 	// 	$("#comments").empty();
@@ -664,7 +684,7 @@ function getMovies() {
 //   });
 // }
 
-var searchMovies = function() {
+function searchMovies() {
 
   var keyword = $('#search').val();
   console.log('keyword');
@@ -684,6 +704,8 @@ var searchMovies = function() {
       }
     });
 }
+
+
 
 function getRT(movie_name, apikey, j){
 
@@ -836,7 +858,8 @@ function getRT(movie_name, apikey, j){
 }
 
 function getReviews(i) {
-  if($('#reviews').is(':empty')) {
+  var div = '#reviews'+i;
+  if(!($(div).is(':empty'))) {
     return;
   }
   var movie_id = mObj[i]['id'];
@@ -844,7 +867,6 @@ function getReviews(i) {
   var param_apikey = apikeys[1];
   url = 'http://api.rottentomatoes.com/api/public/v1.0/movies/' 
     + movie_id +  '/reviews.json?apikey=' + param_apikey;
-  var div = '#reviews'+i;
   $.ajax({
     'type' : "GET", 
     'url': url,
@@ -891,4 +913,105 @@ function getReviews(i) {
   });
 }
 
-$(document).ready(main);
+function getRTReviews(param_apikey){
+  url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey='+ param_apikey;
+  $.ajax({
+    'type' : "GET", 
+    'url': url,
+    'cache': true,
+    'dataType': 'jsonp',
+    'success': function(data, textStats, XMLHttpRequest){
+		console.log(data);
+		list_movies = data['movies'];
+		for(var i = 0; i < list_movies.length; i++)
+		{
+			parseMovieRT(list_movies[i]);
+		}
+    }
+  });
+}
+
+
+function parseMoviesRT(my_movie){
+	var movie_title = my_movie['title'];
+	var movie_id = my_movie['id'];
+	var c_score = my_movie['ratings']['critics_score']; 
+	var a_score = my_movie['ratings']['audience_score']; 
+	var year = my_movie['year']; 
+	var rating1 = my_movie['mpaa_rating']; 
+	var runtime1 = my_movie['runtime'];
+	var review_summary = "Not Found. ";
+	if(my_movie['critics_consensus']) {
+	review_summary = my_movie['critics_consensus'];
+	}
+	var synopsis1 = "Not Found.";
+	if(my_movie['synopsis']) {
+	var synopsis1 = my_movie['synopsis'];
+	}
+	var images = my_movie['posters'];
+	var image = null; 
+	if (images['thumbnail'])
+	{
+	image = images['thumbnail'];
+	}
+	else if (images['profile'])
+	{
+	image = images['profile'];
+	}
+	else if (images['detailed'])
+	{
+	image = images['detailed'];
+	}
+	else if (images['original'])
+	{
+	image = images['original'];
+	}
+    mObj.push({movieName: movie_title, mpaRating: rating1, runtime: runtime1, criticCons: review_summary, 
+    	trailer: "", synopsis: synopsis1, criticsScore: c_score, audienceScore: a_score, 
+    	releaseDate: year, img: image, thousandsbest: "", nytreview: "", nytTitle: "", 
+    	nytLink: "", id: movie_id});
+}
+
+function updateHTMLWithMovies()
+{
+	var contents = "";
+	for (var j = 0; j < mObj.length; j++)
+	{
+		var contents += 
+	      '<div class="movie">'+
+	        '<div class="panel panel-default">'+
+	          '<div class="panel-body">'+
+	            '<div class="row">'+
+	              '<div class="col-md-2">'+
+	                '<img src='+mObj[j]['img']+' alt="Movie Poster" height="125" width="100">'+
+	              '</div>'+
+	              '<div class="col-md-10">'+
+	                '<p><span style="font-size: 16px; font-weight: bold;">'+ mObj[j]['movieName'] +' </span><span style="color: #707070; font-size: 12px">'+mObj[j]['year']+'</span>'+
+	                '<br><b>MPA Rating: </b>'+mObj[j]['mpaRating']+'<b> Runtime: </b>'+mObj[j]['runtime']+
+	                '<br><b>Synopsis: </b>'+mObj[j]['synopsis']+
+	                '</p>'+
+	                '<a href="'+mObj[j]['trailer']+'" target="_blank">'+'Trailers'+'</a>'+
+	              '</div>'+
+	            '</div>'+
+	            '<div class="panel panel-default">'+
+	             '<div class="panel-heading" role="tab" id="heading'+j+'">'+
+	               '<h6 class="panel-title">'+
+	                 '<a class="collapsed" data-toggle="collapse" data-parent="#accordion'+j+'" href="#collapse'+j+'" aria-expanded="false" aria-controls="collapse'+j+'" onclick="getReviews('+j+');">'+
+	                   'Reviews: '+
+	                 '</a>'+
+	               '</h4>'+
+	             '</div>'+
+	             '<div id="collapse'+j+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'+j+'">'+
+	               '<div class="panel-body" id="reviews'+j+'">'+
+	               //contents2+
+	                '</div>'+
+	              '</div>'+
+	            '</div>'+
+	            '<button type="button" class="btn btn-info" id="clearB" onclick="addtoQueue();">Add</button>'
+	          '</div>'+
+	        '</div>'+
+	      '</div>';
+  	}
+  	$("#movies").append(contents);
+}
+
