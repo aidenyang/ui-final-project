@@ -98,7 +98,9 @@ var main = function() {
 
 var addToQueue = function(index) {
 
-
+	if(moviesAdded.indexOf(mObj[index])==-1) {
+		//save movie added
+      	moviesAdded[moviesAdded.length]=mObj[index];
 
 		var movie = mObj[index]
 	var title = movie.movieName;
@@ -113,6 +115,19 @@ var addToQueue = function(index) {
 	item += "<\/div>";
 
 	$("#queue").append(item);
+
+	}
+
+	//parameter index i
+if(typeof(Storage) !== "undefined")
+  {
+    localStorage.setItem("movies", moviesAdded);
+  }
+  else 
+  {
+    console.log("Browser does not support storage");
+  }
+	
 
 	
 }
@@ -799,9 +814,6 @@ function getRT(movie_name, apikey, j){
           '</div>'+
         '</div>'+
       '</div>';
-
-      //save movie added
-      moviesAdded[moviesAdded.length]=j;
 
       if(!firstLoaded) {
         $("#movies").empty();
