@@ -21,16 +21,18 @@ var moviesAdded = [];
 
 
 var main = function() {
+	// localStorage.setItem("queue", JSON.stringify(moviesAdded));
 
 	getLatestMovies(0);
 	//parameter index i
 	if(typeof(Storage) !== "undefined")
 	  {
 	    if (localStorage.getItem("queue") !== null) {
-	    	var queue = localStorage.getItem("queue");
+	    	var queue = JSON.parse(localStorage.getItem("queue"));
 	    	var i;
 	    	for(i=0; i<queue.length; i++) {
-	    		addToQueue(queue[i]);
+	    		console.log(queue[i]);
+	    		addToQueue(null, queue[i]);
 	    	}
 		}
 	  }
@@ -39,7 +41,7 @@ var main = function() {
 	    console.log("Browser does not support storage");
 	  }
 
-	$(document).ready(main);
+	
 	// $("#random").click(function(){
 	// 	$("#comments").empty();
 	// 	$("#header").text("Random Comments");
@@ -98,17 +100,43 @@ var main = function() {
 	});
 }
 
-var addToQueue = function(index) {
+var addToQueue = function(index, mObject) {
 
 	if(moviesAdded.length+1 > 11) {
-		alert("Maximum number of movies allowed in queue is 11!")
+		alert("Maximum number of movies allowed in queue is 11!");
 	}
 
-	if(moviesAdded.indexOf(mObj[index])==-1 && moviesAdded.length<11) {
-		//save movie added
-	    moviesAdded[moviesAdded.length]=mObj[index];
+	var fromStorage = 0;
+	var prevSaved = 0;
 
-		var movie = mObj[index]
+	if(index==null && mObject!=null) {
+		fromStorage = 1;
+	}
+	else {
+		console.log("here");
+		$.each(moviesAdded, function(i, data) {
+			
+			if(data.movieName===mObj[index].movieName) {
+				console.log("fond");
+				prevSaved == 1;
+			}
+		});
+
+	}
+	
+	if(prevSaved==0 && moviesAdded.indexOf(mObj[index])==-1 && moviesAdded.length<11) {
+		var movie;
+
+		if(fromStorage) {
+			movie = mObject;
+		}
+		else {
+			movie = mObj[index];	
+		}
+		
+		//save movie added
+	    moviesAdded[moviesAdded.length]=movie;
+
 		var title = movie.movieName;
 		var imageUrl = movie.img;
 
@@ -124,7 +152,7 @@ var addToQueue = function(index) {
 
 		//parameter index i
 		if(typeof(Storage) !== "undefined") {
-			localStorage.setItem("movies", moviesAdded);
+			localStorage.setItem("queue", JSON.stringify(moviesAdded));
 		}
 		else {
 			console.log("Browser does not support storage");
@@ -585,7 +613,7 @@ var getLatestMovies = function(offset) {
       movies.length = 0;
       $.merge(movies, data.results);
       getMovies();
-      console.log(movies);
+      // console.log(movies);
     }
             
   });
@@ -594,9 +622,9 @@ var getLatestMovies = function(offset) {
 
 function parseMovie(i)
 {
-  console.log(i);
-  console.log("movie");
-  console.log(movies[i]);
+  // console.log(i);
+  // console.log("movie");
+  // console.log(movies[i]);
   var JSON_movie = movies[i];
   var thousand_best = 'N';
   if (JSON_movie['thousand_best'] && JSON_movie['thousand_best'] == 1)
@@ -682,8 +710,8 @@ function getMovies() {
 function searchMovies() {
 
   var keyword = $('#search').val();
-  console.log('keyword');
-  console.log(keyword);
+  // console.log('keyword');
+  // console.log(keyword);
   var url = 'http://api.nytimes.com/svc/movies/v2/reviews/search.jsonp?query='+keyword+'&api-key=b5c06f77f4bd3bc6d762aaf3259089c9:11:67621633';
     $.ajax({
       'url' : url,
@@ -695,7 +723,7 @@ function searchMovies() {
         $.merge(movies, data.results);
         $("#movies").empty();
         getMovies();
-        console.log(movies);
+        // console.log(movies);
       }
     });
 }
@@ -725,10 +753,10 @@ function getRT(movie_name, apikey, j){
       }
       if (!my_movie)
       {
-        console.log('Movie not found');
+        // console.log('Movie not found');
         my_movie = movies[0];
       }
-      console.log(my_movie);
+      // console.log(my_movie);
       var movie_id = my_movie['id'];
       var c_score = my_movie['ratings']['critics_score']; 
       var a_score = my_movie['ratings']['audience_score']; 
@@ -855,7 +883,7 @@ function getReviews(i) {
     return;
   }
   var movie_id = mObj[i]['id'];
-  console.log(movie_id);
+  // console.log(movie_id);
   var param_apikey = apikeys[1];
   url = 'http://api.rottentomatoes.com/api/public/v1.0/movies/' 
     + movie_id +  '/reviews.json?apikey=' + param_apikey;
@@ -867,15 +895,15 @@ function getReviews(i) {
     'success': function(data, textStats, XMLHttpRequest){
       var reviewsString = "";
       reviews = data['reviews'];
-      console.log("reviews");
-      console.log(reviews);
+      // console.log("reviews");
+      // console.log(reviews);
       for (var j = 0; j < 3; j++)
       {
         var quote = reviews[j]['quote'];
         var link = reviews[j]['links']['review'];
         reviewsString = reviewsString + quote + ' ' + '<a href="'+link + '" target="_blank">Link</a><br>';
-        console.log(quote);
-        console.log(link);
+        // console.log(quote);
+        // console.log(link);
       }
       var contents= 
                 '<div class="Reviews">'+
@@ -897,7 +925,7 @@ function getReviews(i) {
                       '</div>'+
                   '</div>'+
                 '</div>'
-        console.log(div);
+        // console.log(div);
         //$('#loading-indicator'+x+''+j).remove();
         //$(div).empty();
         $(div).append(contents);
@@ -913,7 +941,7 @@ function getRTReviews(param_apikey){
     'cache': true,
     'dataType': 'jsonp',
     'success': function(data, textStats, XMLHttpRequest){
-		console.log(data);
+		// console.log(data);
 		list_movies = data['movies'];
 		for(var i = 0; i < list_movies.length; i++)
 		{
@@ -1000,7 +1028,7 @@ function updateHTMLWithMovies()
 	                '</div>'+
 	              '</div>'+
 	            '</div>'+
-	            '<button type="button" class="btn btn-info" id="clearB" onclick="addtoQueue();">Add</button>'
+	            '<button type="button" class="btn btn-info" id="clearB" onclick="addToQueue();">Add</button>'
 	          '</div>'+
 	        '</div>'+
 	      '</div>';
@@ -1008,3 +1036,4 @@ function updateHTMLWithMovies()
   	$("#movies").append(contents);
 }
 
+$(document).ready(main);
