@@ -14,8 +14,6 @@ var movkey = {
 	'api-key' : "b219c15f83d293f558335c509e894f44:2:70168743"
 }
 
-var nytkey = "b219c15f83d293f558335c509e894f44:2:70168743";
-
 var movies = [];
 
 var moviesAdded = [];
@@ -23,7 +21,6 @@ var moviesAdded = [];
 
 
 var main = function() {
-
 
 	getLatestMovies(0);
 	//parameter index i
@@ -42,8 +39,7 @@ var main = function() {
 	    console.log("Browser does not support storage");
 	  }
 
-	$(document).ready(getRTReviews(apikeys[0]));
-
+	$(document).ready(main);
 	// $("#random").click(function(){
 	// 	$("#comments").empty();
 	// 	$("#header").text("Random Comments");
@@ -84,74 +80,71 @@ var main = function() {
 	// 	updateRatings(name, rating, self);
 	// });
 
-	$("#search").click(function() {
-		console.log("here1111");
-		searchMovies();	
-	});
-
-	$('#inp').keypress(function(e){
-     	var code = (e.keyCode ? e.keyCode : e.which);
-      	if(code == 13) {
-        searchMovies()
-      }
-	});
-
-	// $("#mostpop").click(function() {
-	// 	addToQueue();	
+	// $("#search").click(function() {
+	// 	console.log("here1111");
+	// 	searchMovies();	
 	// });
 
-	$("#movies").on('click', '.pop', function(event) {
+	// $('#inp').keypress(function(e){
+ //     	var code = (e.keyCode ? e.keyCode : e.which);
+ //      	if(code == 13) {
+ //        searchMovies()
+ //      }
+	// });
 
-		var count = $("#queue").children().length;
-
-		if(count>=10) {
-			//show modal
-		}
-		else {
-			console.log("add button clicked");
-			var title = "test";
-			var imageUrl = "test";
-		
-			addToQueue(title, imageUrl);
-		}
-
+	$("#mostpop").click(function() {
+		$("#movies").empty();
+		// getLatestMovies(0);	
 	});
 }
 
 var addToQueue = function(index) {
 
+	if(moviesAdded.length+1 > 11) {
+		alert("Maximum number of movies allowed in queue is 11!")
+	}
 
+	if(moviesAdded.indexOf(mObj[index])==-1 && moviesAdded.length<11) {
+		//save movie added
+	    moviesAdded[moviesAdded.length]=mObj[index];
 
 		var movie = mObj[index]
-	var title = movie.movieName;
-	var imageUrl = movie.img;
+		var title = movie.movieName;
+		var imageUrl = movie.img;
 
-	var item="";
-	item += "<div class=\"qitem\">";
-	item += "<img class=\"qimage\" src=\""+imageUrl+"\" \/>";
-	item += "<div class=\"qtext\">";
-	item += title;
-	item += "<\/div>";
-	item += "<\/div>";
+		var item="";
+		item += "<div class=\"qitem\">";
+		item += "<img class=\"qimage\" src=\""+imageUrl+"\" \/>";
+		item += "<div class=\"qtext\">";
+		item += title;
+		item += "<\/div>";
+		item += "<\/div>";
 
-	$("#queue").append(item);
+		$("#queue").append(item);
 
-	
-}
-
-var getLatestMovies = function(offset) {
-	var action = "http://api.nytimes.com/svc/movies/v2/reviews/picks.jsonp?order=by-opening-date&offset="+offset;
-
-	$.ajax({
-		'url' : action,
-		'data': movkey,
-		'dataType': 'jsonp',
-		'success': function(data, textStats, XMLHttpRequest) {
-			$.merge(movies, data.results);
+		//parameter index i
+		if(typeof(Storage) !== "undefined") {
+			localStorage.setItem("movies", moviesAdded);
 		}
-	});
-
+		else {
+			console.log("Browser does not support storage");
+		}
+	}
 }
+
+// var getLatestMovies = function(offset) {
+// 	var action = "http://api.nytimes.com/svc/movies/v2/reviews/picks.jsonp?order=by-opening-date&offset="+offset;
+
+// 	$.ajax({
+// 		'url' : action,
+// 		'data': movkey,
+// 		'dataType': 'jsonp',
+// 		'success': function(data, textStats, XMLHttpRequest) {
+// 			$.merge(movies, data.results);
+// 		}
+// 	});
+
+// }
 
 
 var updateRatings = function(name, rating, user) {
@@ -578,8 +571,7 @@ $(document).ready(function() {
   //getRT(query)
   var div = '#movies';
   $(div).append('<img src="loading.gif" id="loading-indicator" />');
-  getRTReviews(apikeys[0]);
-  //getLatestMovies(0);
+  getLatestMovies(0);
 });
 
 var getLatestMovies = function(offset) {
@@ -825,9 +817,6 @@ function getRT(movie_name, apikey, j){
         '</div>'+
       '</div>';
 
-      //save movie added
-      moviesAdded[moviesAdded.length]=j;
-
       if(!firstLoaded) {
         $("#movies").empty();
         firstLoaded = true;
@@ -916,61 +905,24 @@ function getReviews(i) {
   });
 }
 
-function getNYTReviews(j, apikey)
-{
-	keyword = mObj[j]['movieName'];
-	var url = 'http://api.nytimes.com/svc/movies/v2/reviews/search.jsonp?query='+keyword+'&api-key=' + apikey;
-    $.ajax({
-      'url' : url,
-      'dataType' : 'jsonp',
-      'jsonpCallback' : 'cb',
-      'cache': true,
-      'success' : function(data, textStats, XMLHttpRequest) {
-       	var my_movies = data['results'];
-       	for (var i = 0; i < my_movies.length; i++)
-       	{
-       		if (my_movies[i]['display_title'].toLowerCase() === keyword.toLowerCase())
-       		{
-       			parseMovieNYT(j, my_movies[i]);
-       			return;
-       		}
-       	}
-      }
-    });
-}
-function parseMovieNYT(i, JSON_movie)
-{
-  var thousand_best = 'N';
-  if (JSON_movie['thousand_best'] && JSON_movie['thousand_best'] == 1)
-  {
-    thousand_best = 'Y';
-  }
-  var title = JSON_movie['headline'];
-  var review_url = JSON_movie['link']['url'];
-  var summary = 'Summary Not Found';
-  if(JSON_movie['summary_short'])
-  {
-    summary = JSON_movie['summary_short'];
-  }
-  else if(JSON_movie['capsule_review'])
-  {
-    summary = JSON_movie['capsule_review'];
-  }
-  var related_urls = JSON_movie['related_urls'];
-  var trailer1 = "";
-  for (var j = 0; j < related_urls.length; j++)
-  {
-    if (related_urls[j] && related_urls[j]['type'] == 'trailers')
-    {
-      trailer1 = related_urls[j]['url'];
+function getRTReviews(param_apikey){
+  url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey='+ param_apikey;
+  $.ajax({
+    'type' : "GET", 
+    'url': url,
+    'cache': true,
+    'dataType': 'jsonp',
+    'success': function(data, textStats, XMLHttpRequest){
+		console.log(data);
+		list_movies = data['movies'];
+		for(var i = 0; i < list_movies.length; i++)
+		{
+			parseMovieRT(list_movies[i]);
+		}
     }
-  }
-  mObj[i]['thousandsbest'] = thousand_best;
-  mObj[i]['trailer'] = trailer1;
-  mObj[i]['nytreview'] = summary;
-  mObj[i]['nytTitle'] = title;
-  mObj[i]['nytLink'] = review_url;
+  });
 }
+
 
 function parseMoviesRT(my_movie){
 	var movie_title = my_movie['title'];
@@ -982,29 +934,29 @@ function parseMoviesRT(my_movie){
 	var runtime1 = my_movie['runtime'];
 	var review_summary = "Not Found. ";
 	if(my_movie['critics_consensus']) {
-		review_summary = my_movie['critics_consensus'];
+	review_summary = my_movie['critics_consensus'];
 	}
 	var synopsis1 = "Not Found.";
 	if(my_movie['synopsis']) {
-		var synopsis1 = my_movie['synopsis'];
+	var synopsis1 = my_movie['synopsis'];
 	}
 	var images = my_movie['posters'];
 	var image = null; 
 	if (images['thumbnail'])
 	{
-		image = images['thumbnail'];
+	image = images['thumbnail'];
 	}
 	else if (images['profile'])
 	{
-		image = images['profile'];
+	image = images['profile'];
 	}
 	else if (images['detailed'])
 	{
-		image = images['detailed'];
+	image = images['detailed'];
 	}
 	else if (images['original'])
 	{
-		image = images['original'];
+	image = images['original'];
 	}
     mObj.push({movieName: movie_title, mpaRating: rating1, runtime: runtime1, criticCons: review_summary, 
     	trailer: "", synopsis: synopsis1, criticsScore: c_score, audienceScore: a_score, 
@@ -1017,7 +969,7 @@ function updateHTMLWithMovies()
 	var contents = "";
 	for (var j = 0; j < mObj.length; j++)
 	{
-		var contents = contents +
+		var contents += 
 	      '<div class="movie">'+
 	        '<div class="panel panel-default">'+
 	          '<div class="panel-body">'+
@@ -1053,24 +1005,4 @@ function updateHTMLWithMovies()
 	      '</div>';
   	}
   	$("#movies").append(contents);
-}
-
-function getRTReviews(param_apikey){
-  url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey='+ param_apikey;
-  $.ajax({
-    'type' : "GET", 
-    'url': url,
-    'cache': true,
-    'dataType': 'jsonp',
-    'success': function(data, textStats, XMLHttpRequest){
-		console.log(data);
-		list_movies = data['movies'];
-		for(var i = 0; i < list_movies.length; i++)
-		{
-			parseMoviesRT(list_movies[i]);
-			getNYTReviews(i, nytkey);
-		}
-		updateHTMLWithMovies();
-    }
-  });
 }
