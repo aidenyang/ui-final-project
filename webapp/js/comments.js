@@ -969,7 +969,8 @@ function updateHTMLWithMovies()
 	var contents = "";
 	for (var j = 0; j < mObj.length; j++)
 	{
-		var contents += 
+		var contents;
+		contents += 
 	      '<div class="movie">'+
 	        '<div class="panel panel-default">'+
 	          '<div class="panel-body">'+
