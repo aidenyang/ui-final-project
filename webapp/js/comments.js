@@ -1,3 +1,4 @@
+
 var api_key = {
 	'api-key' : "a36fc320f223395ab47b349f4cea12de:19:70168743"
 }
@@ -13,17 +14,27 @@ var mostpop = {
 var movkey = {
 	'api-key' : "b219c15f83d293f558335c509e894f44:2:70168743"
 }
+var apikey = 's8xqnbpqvzph3x7gdbsk3avr';
+var apikey1 = 'xqv5zh6twkfu453sxykdnaz9';
+var apikey2 = 'bwkbh8dkkem76nhprwjr9nkt';
+var apikey3 = 'rye6ydzukefs6cmhrajh4n9z';
+var apikeys = [apikey, apikey1, apikey2, apikey3];
+var baseUrl = "http://api.rottentomatoes.com/api/public/v1.0";
 
 var movies = [];
 
 var moviesAdded = [];
 
-
+var limit = 20;
+var mObj = [];
+var movies = [];
 
 var main = function() {
 	// localStorage.setItem("queue", JSON.stringify(moviesAdded));
 
-	getLatestMovies(0);
+	var div = '#movies';
+  	$(div).append('<img src="loading.gif" id="loading-indicator" />');
+  	getRTReviews(apikeys[0]);
 	//parameter index i
 	if(typeof(Storage) !== "undefined")
 	  {
@@ -170,433 +181,12 @@ var addToQueue = function(index, mObject) {
 
 // }
 
-
-var updateRatings = function(name, rating, user) {
-	var ratingObj = null;
-
-	$.each(ratingData, function(index, value) {
-
-		if (value.name==name) {
-			ratingObj = ratingData[index];
-		}
-
-	});
-
-	if(ratingObj) {
-		updateRatingValues(name, rating, ratingObj);
-	}
-	else {
-		var ratingObj = {
-			name: name,
-			rating_major: rating,
-			Educated: 0,
-			Smart: 0,
-			Cynical: 0,
-			Negative: 0,
-			Hateful: 0,
-			total: 0,
-		};
-
-		ratingObj[rating]++;
-		ratingObj.total++;
-
-		createRatingValue(ratingObj);
-	}
-}
-
-var updateRatingValues = function(name, rating, ratingObj) {
-	ratingObj[rating]++;
-	ratingObj.total++;
-
-	var old = null;
-
-	$(".chat li").each(function(index) {
-		if(index>1) {
-			var com_name = $(this).find("#rating-name").text();
-
-			if(com_name==name) {
-				old = $(this);
-			}
-		}
-		return (old==null);
-	});
-
-	old.remove();
-	createRatingValue(ratingObj);
-}
-
-var createRatingValue = function(ratingObj) {
-	var name = ratingObj.name;
-	var votes = ratingObj.total;
-
-	var ed = Math.round(ratingObj.Educated/ratingObj.total*100);
-	var sm = Math.round(ratingObj.Smart/ratingObj.total*100);
-	var cy = Math.round(ratingObj.Cynical/ratingObj.total*100);
-	var ne = Math.round(ratingObj.Negative/ratingObj.total*100);
-	var ht = Math.round(ratingObj.Hateful/ratingObj.total*100);
-
-	var sum = ed + sm + cy + ne + ht;
-	while(sum>100) {
-		if(ed>0) {
-			ed--;
-			sum--;
-		}
-		else if(sm>0) {
-			sm--;
-			sum--;
-		}
-		else if(cy>0) {
-			cy--;
-			sum--;
-		}
-		else if(ne>0) {
-			ne--;
-			sum--;
-		}
-		else {
-			ht--;
-			sum--;
-		}
-	}
-
-	var rates = [
-		{name: "Educated", value: ed},
-		{name: "Smart", value: sm},
-		{name: "Cynical", value: cy},
-		{name: "Negative", value: ne},
-		{name: "Hateful", value: ht},
-	];
-
-	rates.sort(function(a, b) {
-		if(a.value<b.value) {
-			return -1;
-		}
-		else if(a.value>b.value) {
-			return 1;
-		}
-		else
-			return 0;
-	});
-
-	var rating = rates[rates.length-1].name;
-
-	var ratingCell="";
-	ratingCell += "<li class=\"clearfix\">";
-	ratingCell += "<div class=\"chat-body clearfix\">";
-	ratingCell += "<div class=\"header\">";
-	ratingCell += "<strong id=\"rating-name\" class=\"primary-font\">"+name+"<\/strong>";
-	ratingCell += "<div id=\"rating-major\" class=\"pull-right\">"+rating+"<\/div>";
-	ratingCell += "<\/div>";
-	ratingCell += "<p class=\"nl\">new line<\/p>";
-	ratingCell += "<div id=\"rating-scores\" class=\"progress\">";
-
-	if(ed>0) {
-		ratingCell += "<div class=\"progress-bar progress-bar-success progress-bar-striped\" style=\"width: "+ed+"%\">"+ed+"%";
-		ratingCell += "<\/div>";
-	}
-	if(sm>0) {
-		ratingCell += "<div class=\"progress-bar progress-bar-success\" style=\"width: "+sm+"%\">"+sm+"%";
-		ratingCell += "<\/div>";
-	}
-	if(cy>0) {
-		ratingCell += "<div class=\"progress-bar progress-bar-info\" style=\"width: "+cy+"%\">"+cy+"%";
-		ratingCell += "<\/div>";
-	}
-	if(ne>0) {
-		ratingCell += "<div class=\"progress-bar progress-bar-warning\" style=\"width: "+ne+"%\">"+ne+"%";
-		ratingCell += "<\/div>";
-	}
-	if(ht>0) {
-		ratingCell += "<div class=\"progress-bar progress-bar-danger\" style=\"width: "+ht+"%\">"+ht+"%";
-		ratingCell += "<\/div>";
-	}
-	ratingCell += "<\/div>";
-	ratingCell += "<div class=\"footer\">";
-	if(votes==1) {
-		ratingCell += "1 vote";	
-	}
-	else {
-		ratingCell += votes+" votes";
-	}
-	ratingCell += "<\/div>";
-	ratingCell += "<\/div>";
-	ratingCell += "<\/li>";
-	
-	ratingData[ratingData.length] = ratingObj;
-	$(".chat").append(ratingCell);
-}
-
-var getDate = function(timestamp) {
-	var date = new Date(timestamp*1000);
-	var datecomp = date.toString().split(" ");
-	var datestring = datecomp[0]+", "+datecomp[1]+" "+datecomp[2]+" "+datecomp[3];
-	return datestring;
-}
-
-var getCommentsById = function(userId) {
-	var action = "http://api.nytimes.com/svc/community/v2/comments/user/id/"+userId+".jsonp";
-
-	$.ajax({
-		'url' : action,
-		'dataType': 'jsonp',
-		'data': api_key,
-		'success': function(data, textStats, XMLHttpRequest) {
-
-			if(data.results.comments!=null) {
-
-				$.each(data.results.comments, function(index, comment) {
-					var date = getDate(comment.approveDate);
-					var commentBody = comment.commentBody;
-					var name = comment.display_name;
-					var location = comment.location;
-					var userId = comment.userComments.split("/id/")[1].split(".xml")[0];
-
-					var comment_data = createComment(date, null, commentBody, name, location, userId);
-
-					//check if name is not null!
-					if(name!=null && name!="") {
-						$("#comments").append(comment_data);
-					}
-				});
-			}
-		}
-	});
-}
-
-var getArticle = function(articleUrl) {
-	var action = "http://api.nytimes.com/svc/search/v2/articlesearch.jsonp?";
-	artparam.fq = "web_url:(\""+articleUrl+"\")";
-	var article;
-
-	$.ajax({
-		'url' : action,
-		'jsonpCallback' : "svc_search_v2_articlesearch",
-		'data': artparam,
-		'dataType': 'jsonp',
-		'success': function(data, textStats, XMLHttpRequest) {
-			article = data.response.docs[0];
-			
-			if(article!=null) {
-				showArtModal(article);
-			}
-			else {
-				article = {
-					no_head: "We are sorry!",
-					no_body: "There is no information for this article."
-				}
-				showArtModal(article);
-			}
-		}
-	});
-}
-
-var showArtModal = function (article) {
-	var headline;
-	var body;
-	var source;
-	var author;
-	var image = "";
-	var imageUrl;
-	var error = 0;
-
-	if(article.no_head!=null) {
-		headline = article.no_head;
-		body = article.no_body;
-		error = 1;
-	}
-	else {
-		if(article.headline!=null && article.headline!="") {
-			headline = article.headline.main;	
-		}
-		else if(article.lead_paragraph!=null && article.lead_paragraph!="") {
-			headline = article.lead_paragraph;
-		}
-		else {
-			headline = "";
-		}
-		
-		if(article.snippet!=null && article.snippet!="") {
-			body = article.snippet;
-		}
-		else if(article.abstract!=null && article.abstract!="") {
-			body = article.abstract;	
-		}
-		else {
-			body = "";
-		}
-
-		if(article.source!=null && article.source!="") {
-			source = article.source;
-		}
-		else {
-			source = "";
-		}
-
-		if(article.byline!=null && article.byline.original!=null && article.byline.original!="") {
-			author = article.byline.original;
-		}
-		else {
-			author = "";
-		}
-
-		if(article.multimedia!=null && article.multimedia.length!=0 && article.multimedia[0]!=null 
-			&& article.multimedia[0].url!=null && article.multimedia[0].url!="") {
-			imageUrl = article.multimedia[0].url;
-			image = "<img id='art_image' class='img-responsive' src='http://www.nytimes.com/"+imageUrl+"' alt='image'></img>";
-		}
-	}
-	
-	$("#headline").text(headline);
-	if($("#art_image")!=null ) {
-		$("#art_image").remove();
-	}
-	if(image!="") {
-		$("#body").prepend(image);	
-	}
-	$("#main").text(body);
-	
-	if(error==0) {
-		$("#source").text(source);
-		$("#author").text(author);	
-	}
-	
-	$('#myModal').modal("show");
-}
-
-var getRandomComments = function() {
-	
-	var action = "http://api.nytimes.com/svc/community/v2/comments/random.jsonp";
-
-	$.ajax({
-		'url' : action,
-		'data': api_key,
-		'dataType': 'jsonp',
-		'success': function(data, textStats, XMLHttpRequest) {
-
-			$.each(data.results.comments, function(index, comment) {
-				var date = getDate(comment.approveDate);
-				var articleUrl = comment.articleURL;
-				var commentBody = comment.commentBody;
-				var name = comment.display_name;
-				var location = comment.location;
-				var userId = comment.userComments.split("/id/")[1].split(".xml")[0];
-				var comment_data = createComment(date, articleUrl, commentBody, name, location, userId);
-
-				//check if name is not null!
-				if(name!=null && name!="") {
-					$("#comments").append(comment_data);
-				}
-			});
-		}
-	});
-}
-
-var createArticleTitle = function(articleUrl) {
-	var i = articleUrl.lastIndexOf("/");
-	var k = articleUrl.indexOf(".html");
-	var temp;
-
-	if(k!=-1) {
-		articleUrl = articleUrl.substr(0, k);
-		temp = articleUrl.substr(++i);
-	}
-	else {
-		if(i==articleUrl.length-1) {
-			articleUrl = articleUrl.substr(0, i);
-			i = articleUrl.lastIndexOf("/");
-		}
-		temp = articleUrl.substr(++i);
-	}
-
-	temp = temp.split("-");
-
-	var title = "";
-	for(var j=0; j<temp.length;j++) {
-		var first = temp[j];
-		first = first.charAt(0);
-		title+=first.toUpperCase();
-		
-		var rest = temp[j].substr(1);
-		title+=rest;
-		title+=" ";
-	}
-	return title;
-}
-
-var createComment = function(date, articleUrl, commentBody, name, location, userId) {
-	var articleTitle;
-	if(articleUrl!=null) {
-		articleTitle = createArticleTitle(articleUrl);
-	}
-	else {
-		articleTitle = "";
-	}
-
-	var comment="";
-	comment += "<!-- start comment row -->";
-	comment += "      <div class=\"row\">";
-	comment += "        <div class=\"col-lg-9 panel panel-default panel-horizontal\">";
-	comment += "";
-	comment += "          <div class=\"panel-heading well\">";
-	comment += "            <h3><a id=\"name\" href=\"#\">"+name+"<\/a> <\/h3>";
-	comment += "            <p class=\"userId\">"+userId+"<\/p>";
-	comment += "            <h4>"+location+"<p><small>"+date+"<\/small><\/p><\/h4>";
-	comment += "                <!-- Rate button -->";
-	comment += "                <div class=\"btn-group\">";
-	comment += "                  <button type=\"button\" class=\"btn btn-default dropdown-toggle center-block\" data-toggle=\"dropdown\" aria-expanded=\"false\">";
-	comment += "                    Rate <span class=\"caret\"><\/span>";
-	comment += "                  <\/button>";
-	comment += "                  <ul class=\"dropdown-menu\" role=\"menu\">";
-	comment += "                    <li><a href=\"#\">Educated<\/a><\/li>";
-	comment += "                    <li><a href=\"#\">Smart<\/a><\/li>";
-	comment += "                    <li><a href=\"#\">Cynical<\/a><\/li>";
-	comment += "                    <li><a href=\"#\">Negative<\/a><\/li>";
-	comment += "                    <li><a href=\"#\">Hateful<\/a><\/li>";
-	comment += "                  <\/ul>";
-	comment += "                <\/div>";
-	comment += "                <\/p>";
-	comment += "          <!-- end heading-->";
-	comment += "          <\/div>";
-	comment += "";
-	comment += "        <div class=\"panel-body\">";
-	comment += "          <button id=\"article\" type=\"button\" class=\"btn btn-default btn-lg article_modal\">";
-	comment += "              <span class=\"glyphicon glyphicon-font\" aria-hidden=\"true\"><\/span>";
-	comment += "            <\/button>";
-	comment += "          <h3><a href=\""+articleUrl+"\" target=\"_blank\">"+articleTitle+"<\/a><\/h3>";
-	comment += "          <!-- Article Button -->";
-	comment += "            ";
-	comment += "          <p class=\"lead\">"+commentBody+"<\/p>";
-	comment += "        <!-- end body-->";
-	comment += "        <\/div>";
-	comment += "      <!-- end col-->";
-	comment += "      <\/div>";
-	comment += "     <!-- end row-->";
-	comment += "     <\/div>";
-
-    return comment;
-}
-
-var apikey = 's8xqnbpqvzph3x7gdbsk3avr';
-var apikey1 = 'xqv5zh6twkfu453sxykdnaz9';
-var apikey2 = 'bwkbh8dkkem76nhprwjr9nkt';
-var apikey3 = 'rye6ydzukefs6cmhrajh4n9z';
-var apikeys = [apikey, apikey1, apikey2, apikey3];
-var baseUrl = "http://api.rottentomatoes.com/api/public/v1.0";
-var movkey = {
-  'api-key' : "b219c15f83d293f558335c509e894f44:2:70168743"
-}
-var query = "Gone with the Wind";
-var firstLoaded = false;
-var limit = 20;
-var mObj = [];
-var movies = [];
-
-$(document).ready(function() {
-  //getRT(query)
-  var div = '#movies';
-  $(div).append('<img src="loading.gif" id="loading-indicator" />');
-  getLatestMovies(0);
-});
+// $(document).ready(function() {
+//   //getRT(query)
+//   var div = '#movies';
+//   $(div).append('<img src="loading.gif" id="loading-indicator" />');
+//   getLatestMovies(0);
+// });
 
 var getLatestMovies = function(offset) {
   var action = "http://api.nytimes.com/svc/movies/v2/reviews/search.jsonp?order=by-opening-date&offset="+offset;
@@ -717,9 +307,12 @@ function searchMovies() {
       'success' : function(data, textStats, XMLHttpRequest) {
         movies.length = 0;
         $.merge(movies, data.results);
-        $("#movies").empty();
+        div = '#movies';
+        $(div).empty();
+        $(div).append('<img src="loading.gif" id="loading-indicator" />');
         getMovies();
-        // console.log(movies);
+        $('#loading-indicator').remove();
+        //console.log(movies);
       }
     });
 }
@@ -929,24 +522,96 @@ function getReviews(i) {
   });
 }
 
-function getRTReviews(param_apikey){
-  url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey='+ param_apikey;
-  $.ajax({
-    'type' : "GET", 
-    'url': url,
-    'cache': true,
-    'dataType': 'jsonp',
-    'success': function(data, textStats, XMLHttpRequest){
-		// console.log(data);
-		list_movies = data['movies'];
-		for(var i = 0; i < list_movies.length; i++)
-		{
-			parseMovieRT(list_movies[i]);
-		}
-    }
-  });
+function getNYTReviews(j, apikey)
+{
+	var keyword = mObj[j]['movieName'];
+	var url = 'http://api.nytimes.com/svc/movies/v2/reviews/search.jsonp?query='+keyword+'&api-key=' + apikey;
+    $.ajax({
+      'url' : url,
+      'dataType' : 'jsonp',
+      'cache': true,
+      'success' : function(data, textStats, XMLHttpRequest) {
+       	var my_movies = data['results'];
+       	for (var i = 0; i < my_movies.length; i++)
+       	{
+       		if (my_movies[i]['display_title'].toLowerCase() === keyword.toLowerCase())
+       		{
+       			parseMovieNYT(j, my_movies[i]);
+       			return;
+       		}
+       	}
+      }
+    });
 }
 
+function parseMovieNYT(i, JSON_movie)
+{
+  var thousand_best = 'N';
+  if (JSON_movie['thousand_best'] && JSON_movie['thousand_best'] == 1)
+  {
+    thousand_best = 'Y';
+  }
+  var title = JSON_movie['headline'];
+  var review_url = JSON_movie['link']['url'];
+  var summary = 'Summary Not Found';
+  if(JSON_movie['summary_short'])
+  {
+    summary = JSON_movie['summary_short'];
+  }
+  else if(JSON_movie['capsule_review'])
+  {
+    summary = JSON_movie['capsule_review'];
+  }
+  var related_urls = JSON_movie['related_urls'];
+  var trailer1 = "";
+  for (var j = 0; j < related_urls.length; j++)
+  {
+    if (related_urls[j] && related_urls[j]['type'] == 'trailers')
+    {
+      trailer1 = related_urls[j]['url'];
+    }
+  }
+  mObj[i]['thousandsbest'] = thousand_best;
+  mObj[i]['trailer'] = trailer1;
+  mObj[i]['nytreview'] = summary;
+  mObj[i]['nytTitle'] = title;
+  mObj[i]['nytLink'] = review_url;
+	var contents = 
+	  '<div class="movie">'+
+	    '<div class="panel panel-default">'+
+	      '<div class="panel-body">'+
+	        '<div class="row">'+
+	          '<div class="col-md-2">'+
+	            '<img src="'+mObj[i]['img']+'" alt="Movie Poster" height="125" width="100">'+
+	          '</div>'+
+	          '<div class="col-md-10">'+
+	            '<p><span style="font-size: 16px; font-weight: bold;">'+ mObj[i]['movieName'] +' </span><span style="color: #707070; font-size: 12px">'+mObj[i]['releaseDate']+'</span>'+
+	            '<br><b>MPA Rating: </b>'+mObj[i]['mpaRating']+'<b> Runtime: </b>'+mObj[i]['runtime']+
+	            '<br><b>Synopsis: </b>'+mObj[i]['synopsis']+
+	            '</p>'+
+	            '<a href="'+mObj[i]['trailer']+'" target="_blank">'+'Trailers'+'</a>'+
+	          '</div>'+
+	        '</div>'+
+	        '<div class="panel panel-default">'+
+	         '<div class="panel-heading" role="tab" id="heading'+i+'">'+
+	           '<h6 class="panel-title">'+
+	             '<a class="collapsed" data-toggle="collapse" data-parent="#accordion'+i+'" href="#collapse'+i+'" aria-expanded="false" aria-controls="collapse'+i+'" onclick="getReviews('+i+');">'+
+	               'Reviews: '+
+	             '</a>'+
+	           '</h4>'+
+	         '</div>'+
+	         '<div id="collapse'+i+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'+i+'">'+
+	           '<div class="panel-body" id="reviews'+i+'">'+
+	           //contents2+
+	            '</div>'+
+	          '</div>'+
+	        '</div>'+
+	        '<button type="button" class="btn btn-info" id="clearB" onclick="addtoQueue();">Add</button>'
+	      '</div>'+
+	    '</div>'+
+	  '</div>';
+  	$("#movies").append(contents);
+}
 
 function parseMoviesRT(my_movie){
 	var movie_title = my_movie['title'];
@@ -958,29 +623,29 @@ function parseMoviesRT(my_movie){
 	var runtime1 = my_movie['runtime'];
 	var review_summary = "Not Found. ";
 	if(my_movie['critics_consensus']) {
-	review_summary = my_movie['critics_consensus'];
+		review_summary = my_movie['critics_consensus'];
 	}
 	var synopsis1 = "Not Found.";
 	if(my_movie['synopsis']) {
-	var synopsis1 = my_movie['synopsis'];
+		var synopsis1 = my_movie['synopsis'];
 	}
 	var images = my_movie['posters'];
 	var image = null; 
 	if (images['thumbnail'])
 	{
-	image = images['thumbnail'];
+		image = images['thumbnail'];
 	}
 	else if (images['profile'])
 	{
-	image = images['profile'];
+		image = images['profile'];
 	}
 	else if (images['detailed'])
 	{
-	image = images['detailed'];
+		image = images['detailed'];
 	}
 	else if (images['original'])
 	{
-	image = images['original'];
+		image = images['original'];
 	}
     mObj.push({movieName: movie_title, mpaRating: rating1, runtime: runtime1, criticCons: review_summary, 
     	trailer: "", synopsis: synopsis1, criticsScore: c_score, audienceScore: a_score, 
@@ -988,48 +653,26 @@ function parseMoviesRT(my_movie){
     	nytLink: "", id: movie_id});
 }
 
-function updateHTMLWithMovies()
-{
-	var contents = "";
-	for (var j = 0; j < mObj.length; j++)
-	{
-		var contents;
-		contents += 
-	      '<div class="movie">'+
-	        '<div class="panel panel-default">'+
-	          '<div class="panel-body">'+
-	            '<div class="row">'+
-	              '<div class="col-md-2">'+
-	                '<img src='+mObj[j]['img']+' alt="Movie Poster" height="125" width="100">'+
-	              '</div>'+
-	              '<div class="col-md-10">'+
-	                '<p><span style="font-size: 16px; font-weight: bold;">'+ mObj[j]['movieName'] +' </span><span style="color: #707070; font-size: 12px">'+mObj[j]['year']+'</span>'+
-	                '<br><b>MPA Rating: </b>'+mObj[j]['mpaRating']+'<b> Runtime: </b>'+mObj[j]['runtime']+
-	                '<br><b>Synopsis: </b>'+mObj[j]['synopsis']+
-	                '</p>'+
-	                '<a href="'+mObj[j]['trailer']+'" target="_blank">'+'Trailers'+'</a>'+
-	              '</div>'+
-	            '</div>'+
-	            '<div class="panel panel-default">'+
-	             '<div class="panel-heading" role="tab" id="heading'+j+'">'+
-	               '<h6 class="panel-title">'+
-	                 '<a class="collapsed" data-toggle="collapse" data-parent="#accordion'+j+'" href="#collapse'+j+'" aria-expanded="false" aria-controls="collapse'+j+'" onclick="getReviews('+j+');">'+
-	                   'Reviews: '+
-	                 '</a>'+
-	               '</h4>'+
-	             '</div>'+
-	             '<div id="collapse'+j+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'+j+'">'+
-	               '<div class="panel-body" id="reviews'+j+'">'+
-	               //contents2+
-	                '</div>'+
-	              '</div>'+
-	            '</div>'+
-	            '<button type="button" class="btn btn-info" id="clearB" onclick="addToQueue();">Add</button>'
-	          '</div>'+
-	        '</div>'+
-	      '</div>';
-  	}
-  	$("#movies").append(contents);
+function getRTReviews(param_apikey){
+  url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey='+ param_apikey;
+  $.ajax({
+    'type' : "GET", 
+    'url': url,
+    'cache': true,
+    'dataType': 'jsonp',
+    'success': function(data, textStats, XMLHttpRequest){
+		console.log(data);
+		list_movies = data['movies'];
+		for(var i = 0; i < list_movies.length; i++)
+		{
+			parseMoviesRT(list_movies[i]);
+			getNYTReviews(i, nytkeys[i%3]);
+		}
+		console.log('2');
+		console.log(mObj[0]['trailer']);
+		$('#loading-indicator').remove();
+    }
+  });
 }
 
 $(document).ready(main);
