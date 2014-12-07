@@ -21,13 +21,14 @@ var apikey3 = 'rye6ydzukefs6cmhrajh4n9z';
 var apikeys = [apikey, apikey1, apikey2, apikey3];
 var baseUrl = "http://api.rottentomatoes.com/api/public/v1.0";
 
+var nytkeys = ["b5c06f77f4bd3bc6d762aaf3259089c9:11:67621633", "36178b8fb8bbc502488f54210adf8540:5:70174107", "b219c15f83d293f558335c509e894f44:2:70168743"];
+
 var movies = [];
 
 var moviesAdded = [];
 
 var limit = 20;
 var mObj = [];
-var movies = [];
 
 var main = function() {
 	// localStorage.setItem("queue", JSON.stringify(moviesAdded));
@@ -124,7 +125,10 @@ var addToQueue = function(index, mObject) {
 	}
 	else {
 		$.each(moviesAdded, function(i, data) {
+			console.log(mObj[index]);
+			console.log(index);
 			if(data.movieName===mObj[index].movieName) {
+				
 				prevSaved = 1;
 			}
 		});
@@ -188,23 +192,23 @@ var addToQueue = function(index, mObject) {
 //   getLatestMovies(0);
 // });
 
-var getLatestMovies = function(offset) {
-  var action = "http://api.nytimes.com/svc/movies/v2/reviews/search.jsonp?order=by-opening-date&offset="+offset;
+// var getLatestMovies = function(offset) {
+//   var action = "http://api.nytimes.com/svc/movies/v2/reviews/search.jsonp?order=by-opening-date&offset="+offset;
 
-  $.ajax({
-    'url' : action,
-    'data': movkey,
-    'dataType': 'jsonp',
-    'success': function(data, textStats, XMLHttpRequest) {
-      movies.length = 0;
-      $.merge(movies, data.results);
-      getMovies();
-      // console.log(movies);
-    }
+//   $.ajax({
+//     'url' : action,
+//     'data': movkey,
+//     'dataType': 'jsonp',
+//     'success': function(data, textStats, XMLHttpRequest) {
+//       movies.length = 0;
+//       $.merge(movies, data.results);
+//       getMovies();
+//       // console.log(movies);
+//     }
             
-  });
+//   });
 
-}
+// }
 
 function parseMovie(i)
 {
@@ -264,6 +268,9 @@ function getMovies() {
   var i;
   for(i=0; i<limit; i++)
   {
+  	console.log("attention");
+  	console.log(i);
+  	console.log(movies[i]);
     var keyword = movies[i]['display_title'];
     parseMovie(i); 
     var passkey = apikeys[i % 4];
@@ -296,7 +303,7 @@ function getMovies() {
 function searchMovies() {
 
   var keyword = $('#search').val();
-  // console.log('keyword');
+  console.log('keyword');
   // console.log(keyword);
   var url = 'http://api.nytimes.com/svc/movies/v2/reviews/search.jsonp?query='+keyword+'&api-key=b5c06f77f4bd3bc6d762aaf3259089c9:11:67621633';
     $.ajax({
@@ -306,11 +313,24 @@ function searchMovies() {
       'cache': true,
       'success' : function(data, textStats, XMLHttpRequest) {
         movies.length = 0;
+        console.log("hello");
         $.merge(movies, data.results);
+                console.log(movies);
         div = '#movies';
         $(div).empty();
         $(div).append('<img src="loading.gif" id="loading-indicator" />');
-        getMovies();
+        var i;
+		for(i=0; i<movies.length; i++)
+		{
+			console.log("attention");
+			console.log(i);
+			console.log(movies[i]);
+		var keyword = movies[i]['display_title'];
+		parseMovie(i); 
+		var passkey = apikeys[i % 4];
+		getRT(keyword, passkey, i);
+		}
+        //getMovies();
         $('#loading-indicator').remove();
         //console.log(movies);
       }
@@ -434,10 +454,10 @@ function getRT(movie_name, apikey, j){
         '</div>'+
       '</div>';
 
-      if(!firstLoaded) {
-        $("#movies").empty();
-        firstLoaded = true;
-      }
+      // if(!firstLoaded) {
+      //   $("#movies").empty();
+      //   firstLoaded = true;
+      // }
       $("#movies").append(contents);
 
       mObj[j]['movieName'] = movie_name;
@@ -487,10 +507,22 @@ function getReviews(i) {
       // console.log("reviews");
       // console.log(reviews);
       for (var j = 0; j < 3; j++)
-      {
-        var quote = reviews[j]['quote'];
-        var link = reviews[j]['links']['review'];
-        reviewsString = reviewsString + quote + ' ' + '<a href="'+link + '" target="_blank">Link</a><br>';
+      {	
+      	var quote = "No quote available.";
+      	if(reviews[j]['quote']) {
+      		quote = reviews[j]['quote'];
+      	}
+      	var link = "No link available.";
+      	if (reviews[j]['links']['review']) {
+      		link = '<a href="'+reviews[j]['links']['review'] + '" target="_blank">Link</a>';
+      	}
+      	if ((reviews[j]['quote'] || reviews[j]['links']['review'])) {
+      		reviewsString = reviewsString + quote + " " + link + '<br>';
+      	}
+        // var quote = reviews[j]['quote'];
+        // console.log(reviews[j]);
+        // var link = reviews[j]['links']['review'];
+        //reviewsString = reviewsString + quote + " " + link + '<br>';
         // console.log(quote);
         // console.log(link);
       }
@@ -509,7 +541,7 @@ function getReviews(i) {
                       '<div id="content">'+
                           '<p><b>Thousands Best: </b>'+mObj[i]['thousandsbest']+
                           '<br><b>Review: </b>'+'<a href="'+mObj[i]['nytLink']+'">'+mObj[i]['nytTitle']+'</a>'+
-                          '<br>"'+mObj[i]['nytSummary']+'"'+
+                          '<br>"'+mObj[i]['nytreview']+'"'+
                           '</p>'+
                       '</div>'+
                   '</div>'+
@@ -606,7 +638,7 @@ function parseMovieNYT(i, JSON_movie)
 	            '</div>'+
 	          '</div>'+
 	        '</div>'+
-	        '<button type="button" class="btn btn-info" id="clearB" onclick="addtoQueue();">Add</button>'
+	        '<button type="button" class="btn btn-info" id="clearB" onclick="addToQueue('+i+');">Add</button>'
 	      '</div>'+
 	    '</div>'+
 	  '</div>';
