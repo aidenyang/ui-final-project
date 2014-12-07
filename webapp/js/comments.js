@@ -31,7 +31,6 @@ var main = function() {
 	    	var queue = JSON.parse(localStorage.getItem("queue"));
 	    	var i;
 	    	for(i=0; i<queue.length; i++) {
-	    		console.log(queue[i]);
 	    		addToQueue(null, queue[i]);
 	    	}
 		}
@@ -113,17 +112,14 @@ var addToQueue = function(index, mObject) {
 		fromStorage = 1;
 	}
 	else {
-		console.log("here");
 		$.each(moviesAdded, function(i, data) {
-			
 			if(data.movieName===mObj[index].movieName) {
-				console.log("fond");
-				prevSaved == 1;
+				prevSaved = 1;
 			}
 		});
 
 	}
-	
+
 	if(prevSaved==0 && moviesAdded.indexOf(mObj[index])==-1 && moviesAdded.length<11) {
 		var movie;
 
