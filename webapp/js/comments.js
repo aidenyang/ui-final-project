@@ -31,12 +31,10 @@ var limit = 20;
 var mObj = [];
 
 var main = function() {
-	// localStorage.setItem("queue", JSON.stringify(moviesAdded));
 
 	var div = '#movies';
   	$(div).append('<img src="loading.gif" id="loading-indicator" />');
   	getRTReviews(apikeys[0]);
-	//parameter index i
 	if(typeof(Storage) !== "undefined")
 	  {
 	    if (localStorage.getItem("queue") !== null) {
@@ -52,67 +50,12 @@ var main = function() {
 	    console.log("Browser does not support storage");
 	  }
 
-	
-	// $("#random").click(function(){
-	// 	$("#comments").empty();
-	// 	$("#header").text("Random Comments");
-	// 	getRandomComments();	
-	// });
-
-	// $("#clear").click(function(){
-	// 	$(".chat li").each(function(index) {
-	// 		if(index>1) {
-	// 			$(this).remove();
-	// 			ratingData = [];
-	// 		}
-	// 	});
-	// });
-
-	// $("#comments").on('click', '#name', function(event) {
-	// 	event.preventDefault();
-	// 	$("#comments").empty();
-
-	// 	//get user name
-	// 	var name = $(this).text();
-	// 	$("#header").text(name);
-
-	// 	//get user id and get comments from user id
-	// 	var id = $(this).parent().next().text();
-	// 	getCommentsById(id);
-
-	// 	return false;
-	// });
-
-	// $("#comments").on('click', 'li a', function(event) {
-	// 	event.preventDefault();
-	// 	var self = $(this);
-
-	// 	var rating = $(this).text();
-	// 	var name = $(this).parents().find("#name").text();
-
-	// 	updateRatings(name, rating, self);
-	// });
-
-	// $("#search").click(function() {
-	// 	console.log("here1111");
-	// 	searchMovies();	
-	// });
-
-	// $('#inp').keypress(function(e){
- //     	var code = (e.keyCode ? e.keyCode : e.which);
- //      	if(code == 13) {
- //        searchMovies()
- //      }
-	// });
-
-//Why is the list of most popular different every time?
 	$("#mostpop").click(function() {
 		$("#movies").empty();
     mObj.length = 0;
     var div = '#movies';
     $(div).append('<img src="loading.gif" id="loading-indicator" />');
     getRTReviews(apikeys[0]);
-		// getLatestMovies(0);	
 	});
 }
 
@@ -176,50 +119,8 @@ var addToQueue = function(index, mObject) {
 	}
 }
 
-// var getLatestMovies = function(offset) {
-// 	var action = "http://api.nytimes.com/svc/movies/v2/reviews/picks.jsonp?order=by-opening-date&offset="+offset;
-
-// 	$.ajax({
-// 		'url' : action,
-// 		'data': movkey,
-// 		'dataType': 'jsonp',
-// 		'success': function(data, textStats, XMLHttpRequest) {
-// 			$.merge(movies, data.results);
-// 		}
-// 	});
-
-// }
-
-// $(document).ready(function() {
-//   //getRT(query)
-//   var div = '#movies';
-//   $(div).append('<img src="loading.gif" id="loading-indicator" />');
-//   getLatestMovies(0);
-// });
-
-// var getLatestMovies = function(offset) {
-//   var action = "http://api.nytimes.com/svc/movies/v2/reviews/search.jsonp?order=by-opening-date&offset="+offset;
-
-//   $.ajax({
-//     'url' : action,
-//     'data': movkey,
-//     'dataType': 'jsonp',
-//     'success': function(data, textStats, XMLHttpRequest) {
-//       movies.length = 0;
-//       $.merge(movies, data.results);
-//       getMovies();
-//       // console.log(movies);
-//     }
-            
-//   });
-
-// }
-
 function parseMovie(i)
 {
-  // console.log(i);
-  // console.log("movie");
-  // console.log(movies[i]);
   var JSON_movie = movies[i];
   var thousand_best = 'N';
   if (JSON_movie['thousand_best'] && JSON_movie['thousand_best'] == 1)
@@ -248,26 +149,7 @@ function parseMovie(i)
   }
   mObj.push({movieName: "", mpaRating: "", runtime: "", criticCons: "", trailer: trailer1,
         synopsis: "", criticsScore: "", audienceScore: "", releaseDate: "", img: "", thousandsbest: thousand_best, nytreview: summary, nytTitle: title, nytLink: review_url, id:0});
-  // console.log(thousand_best);
-  // console.log(title);
-  // console.log(review_url);
-  // console.log(summary);
 }
-
-// function getMovieResults(keyword) {
-//   var url = 'http://api.nytimes.com/svc/movies/v2/reviews/search.jsonp?query='+keyword+'&api-key=b5c06f77f4bd3bc6d762aaf3259089c9:11:67621633';
-//     $.ajax({
-//       'url' : url,
-//       'dataType' : 'jsonp',
-//       'jsonpCallback' : 'cb',
-//       'cache': true,
-//       'success' : function(data, textStats, XMLHttpRequest) {
-//         console.log(data);
-        
-//         return list_movies;
-//       }
-//     });
-// }
 
 function getMovies() {
   var i;
@@ -284,26 +166,6 @@ function getMovies() {
 
 }
 
-// function getRTReviews(movie_id, param_apikey){
-//   url = 'http://api.rottentomatoes.com/api/public/v1.0/movies/' 
-//     + movie_id +  '/reviews.json?apikey=' + param_apikey;
-//   $.ajax({
-//     'type' : "GET", 
-//     'url': url,
-//     'cache': true,
-//     'dataType': 'jsonp',
-//     'success': function(data, textStats, XMLHttpRequest){
-//       reviews = data['reviews']
-//       for (var i = 0; i < 3; i++)
-//       {
-//         var quote = reviews[i]['quote'];
-//         var link = reviews[i]['links']['review'];
-//         console.log(quote);
-//         console.log(link);
-//       }
-//     }
-//   });
-// }
 function handle(e)
 {
  var key=e.keyCode || e.which;
@@ -333,18 +195,12 @@ function searchMovies() {
         var i;
       	for(i=0; i<movies.length; i++)
       	{
-      		// console.log("attention");
-      		// console.log(i);
-      		// console.log(movies[i]);
         	var keyword = movies[i]['display_title'];
         	parseMovie(i); 
         	var passkey = apikeys[i % 4];
         	getRT(keyword, passkey, i);
       	}
-        //getMovies();
         $('#loading-indicator').remove();
-        //console.log(movies);
-
     }
     });
 }
@@ -361,7 +217,6 @@ function getRT(movie_name, apikey, j){
     'dataType': 'jsonp',
     'success': function(data, textStats, XMLHttpRequest)
     {
-      //console.log(data);
       var movies = data['movies'];
       var my_movie = null;
       for (var i = 0; i < movies.length; i++)
@@ -374,15 +229,11 @@ function getRT(movie_name, apikey, j){
       }
       if (!my_movie)
       {
-        // console.log('Movie not found');
         my_movie = movies[0];
-        // console.log('Movie now');
-        // console.log(movies[0]);
       }
       if(!my_movie) {
         return;
       }
-      // console.log(my_movie);
       var movie_id = my_movie['id'];
       var c_score = my_movie['ratings']['critics_score']; 
       var a_score = my_movie['ratings']['audience_score']; 
@@ -394,11 +245,9 @@ function getRT(movie_name, apikey, j){
         review_summary = my_movie['critics_consensus'];
       }
       var synopsis1 = "Not Found.";
-      //var review_summary = my_movie['critics_consensus']; 
       if(my_movie['synopsis']) {
         var synopsis1 = my_movie['synopsis'];
       }
-      // var synopsis1 = my_movie['synopsis']; 
       var images = my_movie['posters'];
       var image = null; 
       if (images['thumbnail'])
@@ -417,25 +266,6 @@ function getRT(movie_name, apikey, j){
       {
         image = images['original'];
       }
-        // var contents2= '<div class="Reviews">'+
-        //           '<div class="title_box" id="rotTom">'+
-        //               '<div id="title"><b>Rotten Tomatoes</b></div>'+
-        //               '<div id="content">'+
-        //                   '<p><b>Critics Score: </b>'+c_score+'<b> Audience Score: </b>'+a_score+
-        //                   '<br><b>Critics Concensus: </b>'+review_summary+'</p>'+
-        //               '</div>'+
-        //           '</div>'+
-        //           '<p><br></p>'+
-        //           '<div class="title_box" id="NYTTom">'+
-        //               '<div id="title"><b>New York Times Review</b></div>'+
-        //               '<div id="content">'+
-        //                   '<p><b>Thousands Best: </b>'+mObj[j]['thousandsbest']+
-        //                   '<br><b>Review: </b>'+'<a href="'+mObj[j]['nytLink']+'">'+mObj[j]['nytTitle']+'</a>'+
-        //                   '<br>"'+mObj[j]['nytreview']+'"'+
-        //                   '</p>'+
-        //               '</div>'+
-        //           '</div>'+
-        //         '</div>';
       var contents = 
       '<div class="movie">'+
         '<div class="panel panel-default">'+
@@ -471,10 +301,6 @@ function getRT(movie_name, apikey, j){
         '</div>'+
       '</div>';
 
-      // if(!firstLoaded) {
-      //   $("#movies").empty();
-      //   firstLoaded = true;
-      // }
       $("#movies").append(contents);
 
       mObj[j]['movieName'] = movie_name;
@@ -486,15 +312,7 @@ function getRT(movie_name, apikey, j){
       mObj[j]['audienceScore'] = a_score;
       mObj[j]['releaseDate'] = year;
       mObj[j]['img'] = image;
-      mObj[j]['id'] = movie_id;
-      // // console.log('Rating: ' + rating);
-      // // console.log('Runtime: ' + runtime);
-      // // console.log('Review Summary: ' + review_summary);
-      // // console.log('Synopsis: ' + synopsis);
-      // // console.log('Critics Score: ' + c_score);
-      // // console.log('Audience Score: ' + a_score);
-      // // console.log('Year: ' + year);
-      // // console.log('Thumbnail: ' + image);     
+      mObj[j]['id'] = movie_id;    
     },
     'error': function (request, status, error) {
 
@@ -509,7 +327,6 @@ function getReviews(i) {
     return;
   }
   var movie_id = mObj[i]['id'];
-  // console.log(movie_id);
   var param_apikey = apikeys[1];
   url = 'http://api.rottentomatoes.com/api/public/v1.0/movies/' 
     + movie_id +  '/reviews.json?apikey=' + param_apikey;
@@ -539,12 +356,6 @@ function getReviews(i) {
       	if ((reviews[j]['quote'] || reviews[j]['links']['review'])) {
       		reviewsString = reviewsString + quote + " " + link + '<br>';
       	}
-        // var quote = reviews[j]['quote'];
-        // console.log(reviews[j]);
-        // var link = reviews[j]['links']['review'];
-        //reviewsString = reviewsString + quote + " " + link + '<br>';
-        // console.log(quote);
-        // console.log(link);
       }
       var contents= 
                 '<div class="Reviews">'+
@@ -566,9 +377,6 @@ function getReviews(i) {
                       '</div>'+
                   '</div>'+
                 '</div>'
-        // console.log(div);
-        //$('#loading-indicator'+x+''+j).remove();
-        //$(div).empty();
         $(div).append(contents);
     }
   });
