@@ -105,8 +105,12 @@ var main = function() {
  //      }
 	// });
 
+//Why is the list of most popular different every time?
 	$("#mostpop").click(function() {
 		$("#movies").empty();
+    var div = '#movies';
+    $(div).append('<img src="loading.gif" id="loading-indicator" />');
+    getRTReviews(apikeys[0]);
 		// getLatestMovies(0);	
 	});
 }
@@ -266,7 +270,7 @@ function parseMovie(i)
 
 function getMovies() {
   var i;
-  for(i=0; i<limit; i++)
+  for(i=0; i<movies.length; i++)
   {
   	console.log("attention");
   	console.log(i);
@@ -320,20 +324,21 @@ function searchMovies() {
         $(div).empty();
         $(div).append('<img src="loading.gif" id="loading-indicator" />');
         var i;
-		for(i=0; i<movies.length; i++)
-		{
-			console.log("attention");
-			console.log(i);
-			console.log(movies[i]);
-		var keyword = movies[i]['display_title'];
-		parseMovie(i); 
-		var passkey = apikeys[i % 4];
-		getRT(keyword, passkey, i);
-		}
+      	for(i=0; i<movies.length; i++)
+      	{
+      		// console.log("attention");
+      		// console.log(i);
+      		// console.log(movies[i]);
+        	var keyword = movies[i]['display_title'];
+        	parseMovie(i); 
+        	var passkey = apikeys[i % 4];
+        	getRT(keyword, passkey, i);
+      	}
         //getMovies();
         $('#loading-indicator').remove();
         //console.log(movies);
-      }
+
+    }
     });
 }
 
@@ -364,6 +369,11 @@ function getRT(movie_name, apikey, j){
       {
         // console.log('Movie not found');
         my_movie = movies[0];
+        // console.log('Movie now');
+        // console.log(movies[0]);
+      }
+      if(!my_movie) {
+        return;
       }
       // console.log(my_movie);
       var movie_id = my_movie['id'];
@@ -429,7 +439,7 @@ function getRT(movie_name, apikey, j){
               '</div>'+
               '<div class="col-md-10">'+
                 '<p><span style="font-size: 16px; font-weight: bold;">'+ movie_name +' </span><span style="color: #707070; font-size: 12px">'+year+'</span>'+
-                '<br><b>MPA Rating: </b>'+rating1+'<b> Runtime: </b>'+runtime1+
+                '<br><b>MPA Rating: </b>'+rating1+'<b> Runtime: </b>'+runtime1+ " min"+
                 '<br><b>Synopsis: </b>'+synopsis1+
                 '</p>'+
                 '<a href="'+mObj[j]['trailer']+'" target="_blank">'+'Trailers'+'</a>'+
@@ -504,13 +514,16 @@ function getReviews(i) {
     'success': function(data, textStats, XMLHttpRequest){
       var reviewsString = "";
       reviews = data['reviews'];
-      // console.log("reviews");
-      // console.log(reviews);
-      for (var j = 0; j < 3; j++)
+      console.log("reviews");
+      console.log(reviews);
+      if(reviews.length==0) {
+        reviewsString = "No reviews found.";
+      }
+      for (var j = 0; j < 3 && j<reviews.length; j++)
       {	
       	var quote = "No quote available.";
       	if(reviews[j]['quote']) {
-      		quote = reviews[j]['quote'];
+      		quote = '"'+ reviews[j]['quote']+'"';
       	}
       	var link = "No link available.";
       	if (reviews[j]['links']['review']) {
@@ -618,7 +631,7 @@ function parseMovieNYT(i, JSON_movie)
 	          '</div>'+
 	          '<div class="col-md-10">'+
 	            '<p><span style="font-size: 16px; font-weight: bold;">'+ mObj[i]['movieName'] +' </span><span style="color: #707070; font-size: 12px">'+mObj[i]['releaseDate']+'</span>'+
-	            '<br><b>MPA Rating: </b>'+mObj[i]['mpaRating']+'<b> Runtime: </b>'+mObj[i]['runtime']+
+	            '<br><b>MPA Rating: </b>'+mObj[i]['mpaRating']+'<b> Runtime: </b>'+mObj[i]['runtime']+ " min"+
 	            '<br><b>Synopsis: </b>'+mObj[i]['synopsis']+
 	            '</p>'+
 	            '<a href="'+mObj[i]['trailer']+'" target="_blank">'+'Trailers'+'</a>'+
