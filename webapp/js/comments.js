@@ -31,7 +31,7 @@ var limit = 20;
 var mObj = [];
 
 var main = function() {
-	// localStorage.setItem("queue", JSON.stringify(moviesAdded));
+  localStorage.setItem("queue", JSON.stringify(moviesAdded));
 
 	var div = '#movies';
   	$(div).append('<img src="loading.gif" id="loading-indicator" />');
@@ -67,6 +67,10 @@ var main = function() {
 	// 		}
 	// 	});
 	// });
+
+  $("#clear").click(function() {
+    localStorage.setItem("queue", JSON.stringify(moviesAdded));
+  });
 
 	// $("#comments").on('click', '#name', function(event) {
 	// 	event.preventDefault();
@@ -114,6 +118,35 @@ var main = function() {
     getRTReviews(apikeys[0]);
 		// getLatestMovies(0);	
 	});
+
+  $("#queue").on('mouseenter', '.qitem', function(event) {
+      var movie = $(this);
+      var button = movie.children()[0];
+      $(button).show();
+  });
+
+  $("#queue").on('mouseleave', '.qitem', function(event) {
+      var movie = $(this);
+      var button = movie.children()[0]
+      $(button).hide();
+  });
+
+  $("#queue").on('click', '.rem', function(event) {
+    var movie = $(this).parent();
+    var movietext = $(this).next().next();
+    removeFromQueue(movie[0].innerText, movie);
+  });
+}
+
+var removeFromQueue = function(movieName, movie) {
+  console.log(moviesAdded);
+  movie.remove();
+  
+  $.each(moviesAdded, function(i, mov) {
+    if(mov.movieName===movieName) {
+      moviesAdded.splice(i, 1);
+    }
+  });
 }
 
 var addToQueue = function(index, mObject) {
@@ -130,14 +163,10 @@ var addToQueue = function(index, mObject) {
 	}
 	else {
 		$.each(moviesAdded, function(i, data) {
-			console.log(mObj[index]);
-			console.log(index);
 			if(data.movieName===mObj[index].movieName) {
-				
 				prevSaved = 1;
 			}
 		});
-
 	}
 
 	if(prevSaved==0 && moviesAdded.indexOf(mObj[index])==-1 && moviesAdded.length<11) {
@@ -151,13 +180,17 @@ var addToQueue = function(index, mObject) {
 		}
 		
 		//save movie added
-	    moviesAdded[moviesAdded.length]=movie;
+	   moviesAdded[moviesAdded.length]=movie;
+     console.log(moviesAdded);
 
 		var title = movie.movieName;
 		var imageUrl = movie.img;
 
-		var item="";
-		item += "<div class=\"qitem\">";
+    var item="";
+    item += "<div class=\"qitem\">";
+    item += "<button type=\"button\" class=\"btn btn-danger btn-circle rem\" aria-label=\"Left Align\">";
+    item += "<span class=\"glyphicon glyphicon-remove-sign\" aria-hidden=\"true\"><\/span>";
+    item += "<\/button>";
 		item += "<img class=\"qimage\" src=\""+imageUrl+"\" \/>";
 		item += "<div class=\"qtext\">";
 		item += title;
