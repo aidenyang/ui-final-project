@@ -108,6 +108,7 @@ var main = function() {
 //Why is the list of most popular different every time?
 	$("#mostpop").click(function() {
 		$("#movies").empty();
+    mObj.length = 0;
     var div = '#movies';
     $(div).append('<img src="loading.gif" id="loading-indicator" />');
     getRTReviews(apikeys[0]);
@@ -312,7 +313,7 @@ function handle(e)
 }
 
 function searchMovies() {
-
+  mObj.length=0;
   var keyword = $('#search').val();
   console.log('keyword');
   // console.log(keyword);
