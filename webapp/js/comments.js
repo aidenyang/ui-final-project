@@ -30,6 +30,8 @@ var moviesAdded = [];
 var limit = 20;
 var mObj = [];
 
+var queueOffset = 100;
+
 var main = function() {
 	// localStorage.setItem("queue", JSON.stringify(moviesAdded));
 
@@ -151,21 +153,93 @@ var addToQueue = function(index, mObject) {
 		}
 		
 		//save movie added
-	    moviesAdded[moviesAdded.length]=movie;
+	   moviesAdded[moviesAdded.length]=movie;
+     var i = moviesAdded.length;
+     var j = i+queueOffset;
 
 		var title = movie.movieName;
 		var imageUrl = movie.img;
 
 		var item="";
-		item += "<div class=\"qitem\">";
+		item += '<div class=\"qitem\" data-toggle="modal" data-target="#myModal'+i+'">';
 		item += "<img class=\"qimage\" src=\""+imageUrl+"\" \/>";
 		item += "<div class=\"qtext\">";
 		item += title;
 		item += "<\/div>";
 		item += "<\/div>";
 
-		$("#queue").append(item);
+    // var contents2= '<div class="Reviews">'+
+    //                 '<div class="title_box" id="rotTom">'+
+    //                     '<div id="title"><b>Rotten Tomatoes</b></div>'+
+    //                     '<div id="content">'+
+    //                         '<p><b>Critics Score: </b>'+movie.criticsScore+'<b> Audience Score: </b>'+movie.audienceScore+
+    //                         '<br><b>Critics Concensus: </b>'+movie.criticCons+'</p>'+
+    //                     '</div>'+
+    //                 '</div>'+
+    //                 '<p><br></p>'+
+    //                 '<div class="title_box" id="NYTTom">'+
+    //                     '<div id="title"><b>New York Times Review</b></div>'+
+    //                     '<div id="content">'+
+    //                         '<p><b>Thousands Best: </b>'+movie.thousandsbest+
+    //                         '<br><b>Review: </b>'+'<a href="'+movie.nytLink+'">'+movie.nytTitle+'</a>'+
+    //                         '<br>"'+movie.nytreview+'"'+
+    //                         '</p>'+
+    //                     '</div>'+
+    //                 '</div>'+
+    //               '</div>';
 
+    var contents =
+    // '<div class="panel panel-default">'+
+    //       '<div class="panel-body">'+
+            '<div class="row">'+
+              '<div class="col-sm-2">'+
+                '<img src='+movie.img+' alt="Movie Poster" height="115" width="90">'+
+              '</div>'+
+              '<div class="col-sm-10">'+
+                '<p><span style="font-size: 16px; font-weight: bold;">'+ movie.movieName +' </span><span style="color: #707070; font-size: 12px">'+movie.releaseDate+'</span>'+
+                '<br><b>MPA Rating: </b>'+movie.mpaRating+'<b> Runtime: </b>'+movie.runtime+ " min"+
+                '<br><b>Synopsis: </b>'+movie.synopsis+
+                '</p>'+
+                '<a href="'+movie.trailer+'" target="_blank">'+'Trailers'+'</a>'+
+              '</div>'+
+            '</div>'+
+            '<div class="panel panel-default">'+
+             '<div class="panel-heading" role="tab" id="heading'+j+'">'+
+               '<h6 class="panel-title">'+
+                 '<a class="collapsed" data-toggle="collapse" data-parent="#accordion'+j+'" href="#collapse'+j+'" aria-expanded="false" aria-controls="collapse'+j+'" onclick="getReviewsQueue('+j+');">'+
+                   'Reviews: '+
+                 '</a>'+
+               '</h4>'+
+             '</div>'+
+             '<div id="collapse'+j+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'+j+'">'+
+               '<div class="panel-body" id="reviews'+j+'">'+
+               //contents2+
+                '</div>'+
+              '</div>'+
+            '</div>';
+        //   '</div>'+
+        // '</div>';
+
+    var modalString = 
+    '<div class="modal fade" id="myModal'+i+'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
+      '<div class="modal-dialog">'+
+        '<div class="modal-content">'+
+          '<div class="modal-header">'+
+            '<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'+
+            '<h4 class="modal-title" id="myModalLabel">'+movie.movieName+'</h4>'+
+          '</div>'+
+          '<div class="modal-body">'+
+          contents+
+          '</div>'+
+          '<div class="modal-footer">'+
+            '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+
+		$("#queue").append(item);
+    $(".queueModals").append(modalString);
 		//parameter index i
 		if(typeof(Storage) !== "undefined") {
 			localStorage.setItem("queue", JSON.stringify(moviesAdded));
@@ -174,6 +248,81 @@ var addToQueue = function(index, mObject) {
 			console.log("Browser does not support storage");
 		}
 	}
+}
+
+
+function getReviewsQueue(i) {
+  var div = '#reviews'+i;
+  if(!($(div).is(':empty'))) {
+    return;
+  }
+  i = i - queueOffset;
+  console.log(moviesAdded);
+  console.log(moviesAdded[i]);
+  var movie_id = moviesAdded[i]['id'];
+  // console.log(movie_id);
+  var param_apikey = apikeys[1];
+  url = 'http://api.rottentomatoes.com/api/public/v1.0/movies/' 
+    + movie_id +  '/reviews.json?apikey=' + param_apikey;
+  $.ajax({
+    'type' : "GET", 
+    'url': url,
+    'cache': true,
+    'dataType': 'jsonp',
+    'success': function(data, textStats, XMLHttpRequest){
+      var reviewsString = "";
+      reviews = data['reviews'];
+      // console.log("reviews");
+      // console.log(reviews);
+      if(reviews.length==0) {
+        reviewsString = "No reviews found.";
+      }
+      for (var j = 0; j < 3 && j<reviews.length; j++)
+      { 
+        var quote = "No quote available.";
+        if(reviews[j]['quote']) {
+          quote = '"'+ reviews[j]['quote']+'"';
+        }
+        var link = "No link available.";
+        if (reviews[j]['links']['review']) {
+          link = '<a href="'+reviews[j]['links']['review'] + '" target="_blank">Link</a>';
+        }
+        if ((reviews[j]['quote'] || reviews[j]['links']['review'])) {
+          reviewsString = reviewsString + quote + " " + link + '<br>';
+        }
+        // var quote = reviews[j]['quote'];
+        // console.log(reviews[j]);
+        // var link = reviews[j]['links']['review'];
+        //reviewsString = reviewsString + quote + " " + link + '<br>';
+        // console.log(quote);
+        // console.log(link);
+      }
+      var contents= 
+                '<div class="Reviews">'+
+                  '<div class="title_box" id="rotTom">'+
+                      '<div id="title"><b>Rotten Tomatoes</b></div>'+
+                      '<div id="content">'+
+                          '<p><b>Critics Score: </b>'+moviesAdded[i]['criticsScore']+'<b> Audience Score: </b>'+moviesAdded[i]['audienceScore']+
+                          '<br><b>Selected Critics Reviews: </b><br>'+reviewsString+'</p>'+
+                      '</div>'+
+                  '</div>'+
+                  '<p><br></p>'+
+                  '<div class="title_box" id="NYTTom">'+
+                      '<div id="title"><b>New York Times Review</b></div>'+
+                      '<div id="content">'+
+                          '<p><b>Thousands Best: </b>'+moviesAdded[i]['thousandsbest']+
+                          '<br><b>Review: </b>'+'<a href="'+moviesAdded[i]['nytLink']+'">'+moviesAdded[i]['nytTitle']+'</a>'+
+                          '<br>"'+moviesAdded[i]['nytreview']+'"'+
+                          '</p>'+
+                      '</div>'+
+                  '</div>'+
+                '</div>'
+        // console.log(div);
+        //$('#loading-indicator'+x+''+j).remove();
+        //$(div).empty();
+        $(div).append(contents);
+    }
+  });
 }
 
 // var getLatestMovies = function(offset) {
@@ -376,7 +525,8 @@ function getRT(movie_name, apikey, j){
       if(!my_movie) {
         return;
       }
-      // console.log(my_movie);
+
+      //console.log(my_movie);
       var movie_id = my_movie['id'];
       var c_score = my_movie['ratings']['critics_score']; 
       var a_score = my_movie['ratings']['audience_score']; 
@@ -568,6 +718,8 @@ function getReviews(i) {
   });
 }
 
+
+
 function getNYTReviews(j, apikey)
 {
 	var keyword = mObj[j]['movieName'];
@@ -660,7 +812,9 @@ function parseMovieNYT(i, JSON_movie)
 }
 
 function parseMoviesRT(my_movie){
+  console.log(my_movie);
 	var movie_title = my_movie['title'];
+  console.log(movie_title);
 	var movie_id = my_movie['id'];
 	var c_score = my_movie['ratings']['critics_score']; 
 	var a_score = my_movie['ratings']['audience_score']; 
