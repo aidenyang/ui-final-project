@@ -303,6 +303,13 @@ function getMovies() {
 //     }
 //   });
 // }
+function handle(e)
+{
+ var key=e.keyCode || e.which;
+  if (key==13){
+     searchMovie();
+  }
+}
 
 function searchMovies() {
 
@@ -313,7 +320,6 @@ function searchMovies() {
     $.ajax({
       'url' : url,
       'dataType' : 'jsonp',
-      'jsonpCallback' : 'cb',
       'cache': true,
       'success' : function(data, textStats, XMLHttpRequest) {
         movies.length = 0;
