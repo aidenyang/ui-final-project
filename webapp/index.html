@@ -28,7 +28,7 @@
 </div>
       		
         <div class="navbar-form navbar-left">
-    <input id="search" type="text" class="form-control" placeholder="Movie Title">
+    <input id="search" type="text" class="form-control" placeholder="Movie Title" onkeypress="handle">
   <button id="searchButton" type="submit" class="btn btn-default" onclick="searchMovies();">Search</button>
 </div>
 
@@ -40,10 +40,7 @@
                     </div>
 
   		</div> -->
-
-	</nav>
-
-  <div id="queue" class="container">
+  <div id="queue" class="container"> <p id="inQueue"><b>Your Movies</b></p>
         <!-- <div class="qitem">
             <img class="qimage" src="images/movie-reel.jpg" />
             <div class="qtext">
@@ -51,6 +48,9 @@
           </div>
         </div> -->
   </div>
+	</nav>
+
+
 
   
 
