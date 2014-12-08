@@ -316,6 +316,9 @@ function searchMovies() {
   mObj.length=0;
   var keyword = $('#search').val();
   console.log('keyword');
+  div = '#movies';
+  $(div).empty();
+  $(div).append('<img src="loading.gif" id="loading-indicator" />');
   // console.log(keyword);
   var url = 'http://api.nytimes.com/svc/movies/v2/reviews/search.jsonp?query='+keyword+'&api-key=b5c06f77f4bd3bc6d762aaf3259089c9:11:67621633';
     $.ajax({
@@ -327,9 +330,6 @@ function searchMovies() {
         console.log("hello");
         $.merge(movies, data.results);
                 console.log(movies);
-        div = '#movies';
-        $(div).empty();
-        $(div).append('<img src="loading.gif" id="loading-indicator" />');
         var i;
       	for(i=0; i<movies.length; i++)
       	{
