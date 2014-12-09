@@ -61,14 +61,12 @@ var main = function() {
       console.log("Browser does not support storage");
     }
 
-//Why is the list of most popular different every time?
 	$("#mostpop").click(function() {
 		$("#movies").empty();
     mObj.length = 0;
     var div = '#movies';
     $(div).append('<img src="loading.gif" id="loading-indicator" />');
     getRTReviews(apikeys[0], 1);
-    //console.log("hi");
 	});
 
   $("#queue").on('mouseenter', '.qitem', function(event) {
@@ -93,11 +91,9 @@ var main = function() {
 
 var removeFromQueue = function(movieName, movie) {
   movie.remove();
-  // console.log(moviesAdded);
   var index = -1;
   
   $.each(moviesAdded, function(i, mov) {
-    console.log(mov);
 
     if(mov.movieName.toLowerCase()==movieName.toLowerCase()) {
       index = i;
@@ -108,7 +104,6 @@ var removeFromQueue = function(movieName, movie) {
   if(index>-1) {
     moviesAdded.splice(index, 1);
     localStorage.setItem("queue", JSON.stringify(moviesAdded));
-    console.log(index);
     index++;
     $("#myModal"+index).remove();
   }
@@ -174,7 +169,6 @@ var addToQueue = function(index, mObject) {
 
 		$("#queue").append(item);
 
-		//parameter index i
 		if(typeof(Storage) !== "undefined") {
 			localStorage.setItem("queue", JSON.stringify(moviesAdded));
 		}
@@ -184,8 +178,6 @@ var addToQueue = function(index, mObject) {
 	
 
     var contents =
-    // '<div class="panel panel-default">'+
-    //       '<div class="panel-body">'+
             '<div class="row">'+
               '<div class="col-sm-2">'+
                 '<img src='+movie.img+' alt="Movie Poster" height="115" width="90">'+
@@ -234,7 +226,6 @@ var addToQueue = function(index, mObject) {
     '</div>';
 
     $(".queueModals").append(modalString);
-    console.log(moviesAdded);
 }
 else if((prevSaved==1 || moviesAdded.indexOf(mObj[index])!=-1) && moviesAdded.length<11) {
   alert("This movie is already added in your queue!");
@@ -243,16 +234,12 @@ else if((prevSaved==1 || moviesAdded.indexOf(mObj[index])!=-1) && moviesAdded.le
 }
 
 function getReviewsQueue(i) {
-  console.log(i);
   var div = '#reviews'+i;
   if(!($(div).is(':empty'))) {
     return;
   }
   i = i - queueOffset-1;
-  console.log(moviesAdded);
-  console.log(moviesAdded[i]);
   var movie_id = moviesAdded[i]['id'];
-  // console.log(movie_id);
   var param_apikey = apikeys[1];
   url = 'http://api.rottentomatoes.com/api/public/v1.0/movies/' 
     + movie_id +  '/reviews.json?apikey=' + param_apikey;
@@ -264,8 +251,6 @@ function getReviewsQueue(i) {
     'success': function(data, textStats, XMLHttpRequest){
       var reviewsString = "";
       reviews = data['reviews'];
-      // console.log("reviews");
-      // console.log(reviews);
       if(reviews.length==0) {
         reviewsString = "No reviews found.";
       }
@@ -344,9 +329,6 @@ function getMovies() {
   var i;
   for(i=0; i<movies.length; i++)
   {
-    console.log("attention");
-    console.log(i);
-    console.log(movies[i]);
     var keyword = movies[i]['display_title'];
     parseMovie(i); 
     var passkey = apikeys[i % 4];
@@ -354,6 +336,7 @@ function getMovies() {
   }
 
 }
+
 
 function handle(e)
 {
@@ -364,10 +347,11 @@ function handle(e)
 }
 
 function searchMovies() {
+  var div = '#movies';
+  $(div).empty();
+  $(div).append('<img src="loading.gif" id="loading-indicator" />');
   mObj.length=0;
   var keyword = $('#search').val();
-  console.log('keyword');
-  // console.log(keyword);
   var url = 'http://api.nytimes.com/svc/movies/v2/reviews/search.jsonp?query='+keyword+'&api-key=b5c06f77f4bd3bc6d762aaf3259089c9:11:67621633';
     $.ajax({
       'url' : url,
@@ -376,12 +360,7 @@ function searchMovies() {
       'cache': true,
       'success' : function(data, textStats, XMLHttpRequest) {
         movies.length = 0;
-        console.log("hello");
         $.merge(movies, data.results);
-                console.log(movies);
-        div = '#movies';
-        $(div).empty();
-        $(div).append('<img src="loading.gif" id="loading-indicator" />');
         var i;
         for(i=0; i<movies.length; i++)
         {
@@ -390,12 +369,14 @@ function searchMovies() {
           var passkey = apikeys[i % 4];
           getRT(keyword, passkey, i);
         }
+        if (movies.length == 0)
+        {
+          $("#movies").append('<h4> No Movies Found :( </h4>');
+        }
         $('#loading-indicator').remove();
     }
     });
 }
-
-
 
 function getRT(movie_name, apikey, j){
 
@@ -486,7 +467,7 @@ function getRT(movie_name, apikey, j){
                 '</div>'+
               '</div>'+
             '</div>'+
-            '<button type="button" class="btn btn-info" id="clearB" onclick="addToQueue('+j+');">Add</button>'
+            '<button type="button" class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Add to your selection" onclick="addToQueue('+j+');">Add</button>'
           '</div>'+
         '</div>'+
       '</div>';
@@ -506,7 +487,7 @@ function getRT(movie_name, apikey, j){
     },
     'error': function (request, status, error) {
 
-            console.log('shit went down. RT Outer');
+            console.log('Shit went down. RottenTomatoes Outer API Call Error');
         }
   });
 }
@@ -528,8 +509,6 @@ function getReviews(i) {
     'success': function(data, textStats, XMLHttpRequest){
       var reviewsString = "";
       reviews = data['reviews'];
-      console.log("reviews");
-      console.log(reviews);
       if(reviews.length==0) {
         reviewsString = "No reviews found.";
       }
@@ -656,7 +635,7 @@ function parseMovieNYT(i, JSON_movie)
               '</div>'+
             '</div>'+
           '</div>'+
-          '<button type="button" class="btn btn-info" id="clearB" onclick="addToQueue('+i+');">Add</button>'
+          '<button type="button" class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Add to your selection" onclick="addToQueue('+i+');">Add</button>'
         '</div>'+
       '</div>'+
     '</div>';
@@ -671,9 +650,7 @@ function parseMovieNYT(i, JSON_movie)
 }
 
 function parseMoviesRT(my_movie){
-  console.log(my_movie);
   var movie_title = my_movie['title'];
-  console.log(movie_title);
   var movie_id = my_movie['id'];
   var c_score = my_movie['ratings']['critics_score']; 
   var a_score = my_movie['ratings']['audience_score']; 
@@ -714,7 +691,6 @@ function parseMoviesRT(my_movie){
 
 function getRTReviews(param_apikey, page){
   page_limit = 16;
-  console.log('page' + page);
   url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey='+ param_apikey + '&page=' + page;
   if ($('#loadMore').length > 0)
   { 
@@ -730,16 +706,13 @@ function getRTReviews(param_apikey, page){
     'cache': true,
     'dataType': 'jsonp',
     'success': function(data, textStats, XMLHttpRequest){
-    console.log(data);
     list_movies = data['movies'];
-    console.log(list_movies);
     for(var i = 0; i < list_movies.length; i++)
     {
       parseMoviesRT(list_movies[i]);
       index = ((page - 1) * page_limit) + i;
       getNYTReviews(index, nytkeys[index%3]);
     }
-    //Rona 
     if (list_movies.length == page_limit)
     {
       page = page + 1;
@@ -747,7 +720,6 @@ function getRTReviews(param_apikey, page){
       var loading = '<div class="movie" id="loadMore">'+ 
         '<button type="submit" class="btn btn-info" onclick="getRTReviews(' + param_apikey + ',' + page + ');">Load More Movies</button>' 
         +'</div>';
-      console.log(loading);
       $("#movies").append(loading); 
     }
     $('#loading-indicator').remove();
@@ -801,7 +773,7 @@ function addShowtimes(movies) {
       if ($('#' + theaterid).length == 0) {
         // add theater if isn't there
         var theaterhtml = '<div class="theater" id="' + theaterid + '">' +
-        '<b>' + theater + '</b>' + '</div>';
+        '<span id="panelHeading"><b>' + theater + '</b>' + '</span></div>';
         $('.showtimes').append(theaterhtml);
       }
       
@@ -809,7 +781,7 @@ function addShowtimes(movies) {
       var movieid = movie.replace(/[\.,-\/#!$'?%\^&\*;:{}=\-_`~()]/g,"").replace(/ /g,'');
       if ($('#' + theaterid + ' #' + movieid).length == 0) {
         var moviehtml = '<div class="smovie" id="' + movieid + '">' +
-        '<i>' + movie + '</i>' + '</div>';
+        '<span id="movieTitle">' + movie  + '</span></div>';
         $('#' + theaterid).append(moviehtml);
       }
 
@@ -878,11 +850,9 @@ $(document).ready(function() {
 
   $(document).on('click', '.theater b', function() {
     var id = $(this).closest("div").attr("id");
-    console.log($('#' + id + ' ' + '.smovie'));
     $('#' + id + ' ' + '.smovie').toggle();
   });
 });
 
 // aiden's stuff ends
 
-// $(document).ready(main);

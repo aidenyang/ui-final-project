@@ -168,10 +168,26 @@
 
 .theater {
   padding: 5px;
-  border: 1px solid black;
+  border: 1px solid #F5F5F5;
   margin-top: 10px;
   margin-bottom: 10px;
   font-size: 18px;
+  background-color: #F8F8F8;
+}
+
+#panelHeading {
+/*  background-color: #F8F8F8;
+/*  padding-left: 10px;*/
+/*  padding-top: 9px;
+  padding-bottom: 9px;
+  padding-right: 50px;*/*/
+  font-size: 16px;
+
+}
+
+#movieTitle {
+  font-weight: 600;
+  font-size: 14px;
 }
 
 .theater b:hover {
