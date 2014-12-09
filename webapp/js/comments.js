@@ -67,8 +67,8 @@ var main = function() {
     mObj.length = 0;
     var div = '#movies';
     $(div).append('<img src="loading.gif" id="loading-indicator" />');
-    getRTReviews(apikeys[0]);
-		// getLatestMovies(0);	
+    getRTReviews(apikeys[0], 1);
+    //console.log("hi");
 	});
 
   $("#queue").on('mouseenter', '.qitem', function(event) {
@@ -226,7 +226,7 @@ function getReviewsQueue(i) {
   if(!($(div).is(':empty'))) {
     return;
   }
-  i = i - queueOffset;
+  i = i - queueOffset-1;
   console.log(moviesAdded);
   console.log(moviesAdded[i]);
   var movie_id = moviesAdded[i]['id'];
@@ -362,12 +362,6 @@ function handle(e)
      searchMovies();
   }
 }
-
-
-$( ".qitem" ).mouseover(function() {
-  $( this ).css({'cursor': 'pointer'});
-});
-
 
 function searchMovies() {
   mObj.length=0;
@@ -878,6 +872,7 @@ function formatTime(hours, minutes) {
 }
 
 $(document).ready(function() {
+  main();
   var today = formatToday();
   $('#date').val(today);
 
@@ -890,4 +885,4 @@ $(document).ready(function() {
 
 // aiden's stuff ends
 
-$(document).ready(main);
+// $(document).ready(main);
