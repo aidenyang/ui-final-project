@@ -486,7 +486,7 @@ function getRT(movie_name, apikey, j){
                 '</div>'+
               '</div>'+
             '</div>'+
-            '<button type="button" class="btn btn-info" id="clearB" onclick="addToQueue('+j+');">Add</button>'
+            '<button type="button" class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Add to your selection" onclick="addToQueue('+j+');">Add</button>'
           '</div>'+
         '</div>'+
       '</div>';
@@ -656,7 +656,7 @@ function parseMovieNYT(i, JSON_movie)
               '</div>'+
             '</div>'+
           '</div>'+
-          '<button type="button" class="btn btn-info" id="clearB" onclick="addToQueue('+i+');">Add</button>'
+          '<button type="button" class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Add to your selection" onclick="addToQueue('+i+');">Add</button>'
         '</div>'+
       '</div>'+
     '</div>';
