@@ -782,7 +782,6 @@ function searchShowtimes() {
   }
 }
 
-$('#movies').hide();
 function stError(errormsg) {
   $('.showtimes').empty();
   var html = '<h4>' + errormsg + '</h4>';
