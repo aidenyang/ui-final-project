@@ -1,3 +1,4 @@
+
 #loadMore
 {
   text-align: center;
@@ -28,6 +29,18 @@
   margin-right: 10px;
 }
 
+.rem {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  display: none;
+}
+
+#clear {
+  position: absolute;
+  right: 10px;
+}
+
 .pop {
   margin-top: 16px;
 }
@@ -50,7 +63,7 @@
 }
 
 .col-lg-9 {
-	padding-left: 0px;
+  padding-left: 0px;
 }
 
 #inQueue {
@@ -62,10 +75,20 @@
 }
 
 #queue {
+
+  /*margin-top: 51px;
+  margin-left: 60px;
+  background-color: rgb(216,216,216);  
+  height: 160px;
+  border: 2px solid gray;
+  border-radius: 3px;
+  position: fixed;
+  z-index: 10;*/
+
   margin-top: 70px;
   margin-bottom: 15px;
   background-color: #F8F8F8;
-  height: 160px;
+  height: 180px;
   border-width: 2px;
   border-style: solid;
   border-color: #EEEEEE; 
@@ -90,14 +113,14 @@
 }
 
 #movies {
-  margin-top: 140px;
+  margin-top: 160px;
 }
 
 .qitem {
   background-color: white;
   display: inline-block;
   height: 120px;
-  top: 5px;
+  top: 20px;
   position: relative;
   margin-left: 15px;
   width: 80px;
@@ -122,12 +145,12 @@
 }
 
 .article_modal {
-	float: right;
-	margin-top: 15px;
+  float: right;
+  margin-top: 15px;
 }
 
 .ratings {
-	margin-top: 15px;
+  margin-top: 15px;
 }
 
 .userId {
@@ -143,24 +166,48 @@
 }
 
 .chat-panel {
-	width:	300px;
-	height: 600px;
-  margin-top: 200px;
+  width:  300px;
+  height: 600px;
+  margin-top: 230px;
 }
 
-.panel-body {
+.smovie {
+  margin-left: 15px;
+  padding: 5px;
+}
 
+.showtime {
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+.theater {
+  padding: 5px;
+  border: 1px solid black;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.theater b:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#stresults {
+  margin-top: 8px;
 }
 
 #source {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 #author {
-	float: left;
-	color: gray;
+  float: left;
+  color: gray;
 }
 
 #art_image {
-	vertical-align: middle;
+  vertical-align: middle;
 }
+

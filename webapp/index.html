@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
 	<title>Movies Raider</title>
 	<meta charset="utf-8"> 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,7 +34,8 @@
         </div>
       		
         <div class="navbar-form navbar-left">
-          <input id="search" type="text" class="form-control" placeholder="Movie Title" onkeypress="handle(event)">
+
+    <input id="search" type="text" class="form-control" placeholder="Movie Title" onkeypress="handle(event)">
           <button id="searchButton" type="submit" class="btn btn-primary" onclick="searchMovies();">Search</button>
         </div>
         <div class="navbar-header navbar-right">
@@ -44,11 +46,33 @@
       </div>
 	 </nav>
 
+<!-- <div class="input-group">
+                        <input id = "search" type="text" class="form-control" placeholder="Keyword(s) e.g. ‘sunset’">
+                        <div class="input-group-btn">
+                            <button type="submit" class="btn btn-default" id = "searchButton" onclick="searchMovies();">Search!</button>
+                        </div>
+                    </div>
 
+  		</div> -->
+      <div id="queue" class="container">
+    <p id="inQueue"><b>Your Movies</b></p>
+    <!-- <button id="clear" type="button" class="btn btn-info right">Clear</button> -->
+        <!-- <div class="qitem">
+          <button type="button" class="btn btn-danger btn-circle rem" aria-label="Left Align">
+            <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
+          </button>
+            <img class="qimage" src="images/movie-reel.jpg" />
+            <div class="qtext">
+            title
+          </div>
+        </div> -->
+  </div>
+
+	</nav>
 
   
 
-	<div class="container">
+  <div class="container">
     
     <div class="row start">
 
@@ -57,26 +81,38 @@
 
 
       <div class="col-lg-3">
-          
-        <div class="chat-panel panel panel-default ratings ratings affix">
-            <div class="panel-heading">
-                Theaters
-            </div>
-            <!-- /.panel-heading -->
-            <div class="panel-body">
-                
-            </div>
-            <!-- /.panel-body -->
-            
-            <!-- panel -->
-        </div>
 
-        <!-- end col-->
+        <div class="chat-panel panel panel-default ratings ratings affix">
+          <div class="panel-heading">
+            Theaters
+          </div>
+          <!-- /.panel-heading -->
+          <div id="stresults" class="panel-body">
+            <div class="theaters-input">
+
+              <div class="form-group">
+                <div class="form-group">
+                  <label class="sr-only" for="date">Password</label>
+                  <input type="date" class="form-control input-sm" id="date" min="">
+                </div>
+
+                <div class="input-group">
+                  <label class="sr-only" for="zipcode">Zip Code</label>
+                  <input type="text" class="form-control input-sm" id="zip" placeholder="Zip code">
+                </div>
+              </div>
+              <button id="showtimesearch" class="btn btn-xs" onclick="searchShowtimes();">Search</button>
+            </div>
+            <div class="showtimes">
+            </div>
+          </div>
+        </div>
+        
       </div>
 
-    <!-- end row-->
+      <!-- end row-->
     </div>
-  <!-- end container-->
+    <!-- end container-->
   </div>
 
   
@@ -92,39 +128,39 @@
           <h3><a id="name" href="#">Commenter</a> </h3>
           <p class="userId">userId</p>
           <h4>Location<p><small>Post_Time</small></p></h4>
-              <!-- Rate button -->
-              <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle center-block" data-toggle="dropdown" aria-expanded="false">
-                  Rate <span class="caret"></span>
-                </button>
-                <ul id="rateValue" class="dropdown-menu" role="menu">
-                  <li><a href="#">Educated</a></li>
-                  <li><a href="#">Smart</a></li>
-                  <li><a href="#">Cynical</a></li>
-                  <li><a href="#">Negative</a></li>
-                  <li><a href="#">Hateful</a></li>
-                </ul>
-              </div>
-              </p>
+          <!-- Rate button -->
+          <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle center-block" data-toggle="dropdown" aria-expanded="false">
+              Rate <span class="caret"></span>
+            </button>
+            <ul id="rateValue" class="dropdown-menu" role="menu">
+              <li><a href="#">Educated</a></li>
+              <li><a href="#">Smart</a></li>
+              <li><a href="#">Cynical</a></li>
+              <li><a href="#">Negative</a></li>
+              <li><a href="#">Hateful</a></li>
+            </ul>
+          </div>
+        </p>
         <!-- end heading-->
-        </div>
+      </div>
 
       <div class="panel-body">
         <button id="article" type="button" class="btn btn-default btn-lg article_modal">
-            <span class="glyphicon glyphicon-font" aria-hidden="true"></span>
-          </button>
+          <span class="glyphicon glyphicon-font" aria-hidden="true"></span>
+        </button>
         <h3><a id= "url" href="http://www.nytimes.com/2013/11/28/world/asia/airspace-claim-forces-us-to-flesh-out-china-strategy.html" target="_blank">Article_Title</a></h3>
         <!-- Article Button -->
-          
+        
         <p class="lead">Comment_Body</p>
-      <!-- end body-->
+        <!-- end body-->
       </div>
-    <!-- end col-->
+      <!-- end col-->
     </div>
-   <!-- end row-->
-   </div>
-  <!-- end container-->
+    <!-- end row-->
   </div>
+  <!-- end container-->
+</div>
 
 <!-- <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
   Launch demo modal
@@ -175,14 +211,13 @@
   </div>
 </div> -->
 
-	<!-- jQuery Version 1.11.0 -->
-    <script src="js/jquery-1.11.0.js"></script>
-	<!-- App Logic -->    
-    <script src="js/comments.js"></script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
+<!-- jQuery Version 1.11.0 -->
+<script src="js/jquery-1.11.0.js"></script>
+<!-- App Logic -->    
+<script src="js/comments.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="js/bootstrap.min.js"></script>
 
 </body>
 
 </html>
-
