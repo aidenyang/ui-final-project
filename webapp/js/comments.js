@@ -85,9 +85,9 @@ var main = function() {
 
   $("#queue").on('click', '.rem', function(event) {
     var movie = $(this).parent();
-    var movietext = $(this).next().next();
+    var movietext = $(this).next().children()[1];
     var movieName = movie[0].innerText;
-    removeFromQueue(movieName.substr(1, movieName.length-2), movie);
+    removeFromQueue(movieName.substr(2, movieName.length-3), movie);
   });
 }
 
