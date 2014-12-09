@@ -342,6 +342,7 @@ function handle(e)
 }
 
 function searchMovies() {
+  var div = '#movies';
   $(div).empty();
   $(div).append('<img src="loading.gif" id="loading-indicator" />');
   mObj.length=0;
@@ -355,7 +356,6 @@ function searchMovies() {
       'success' : function(data, textStats, XMLHttpRequest) {
         movies.length = 0;
         $.merge(movies, data.results);
-        div = '#movies';
         var i;
         for(i=0; i<movies.length; i++)
         {
@@ -363,6 +363,10 @@ function searchMovies() {
           parseMovie(i); 
           var passkey = apikeys[i % 4];
           getRT(keyword, passkey, i);
+        }
+        if (movies.length == 0)
+        {
+          $("#movies").append('<h4> No Movies Found :( </h4>');
         }
         $('#loading-indicator').remove();
     }
