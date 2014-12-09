@@ -181,7 +181,7 @@ var addToQueue = function(index, mObject) {
 		else {
 			console.log("Browser does not support storage");
 		}
-	}
+	
 
     var contents =
     // '<div class="panel panel-default">'+
@@ -235,6 +235,11 @@ var addToQueue = function(index, mObject) {
 
     $(".queueModals").append(modalString);
     console.log(moviesAdded);
+}
+else if((prevSaved==1 || moviesAdded.indexOf(mObj[index])!=-1) && moviesAdded.length<11) {
+  alert("This movie is already added in your queue!");
+}
+
 }
 
 function getReviewsQueue(i) {
@@ -349,28 +354,6 @@ function getMovies() {
   }
 
 }
-
-
-// function getRTReviews(movie_id, param_apikey){
-//   url = 'http://api.rottentomatoes.com/api/public/v1.0/movies/' 
-//     + movie_id +  '/reviews.json?apikey=' + param_apikey;
-//   $.ajax({
-//     'type' : "GET", 
-//     'url': url,
-//     'cache': true,
-//     'dataType': 'jsonp',
-//     'success': function(data, textStats, XMLHttpRequest){
-//       reviews = data['reviews']
-//       for (var i = 0; i < 3; i++)
-//       {
-//         var quote = reviews[i]['quote'];
-//         var link = reviews[i]['links']['review'];
-//         console.log(quote);
-//         console.log(link);
-//       }
-//     }
-//   });
-// }
 
 function handle(e)
 {

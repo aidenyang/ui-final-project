@@ -75,16 +75,6 @@
 }
 
 #queue {
-
-  /*margin-top: 51px;
-  margin-left: 60px;
-  background-color: rgb(216,216,216);  
-  height: 160px;
-  border: 2px solid gray;
-  border-radius: 3px;
-  position: fixed;
-  z-index: 10;*/
-
   margin-top: 70px;
   margin-bottom: 15px;
   background-color: #F8F8F8;
@@ -144,11 +134,6 @@
        padding: 0;
 }
 
-.article_modal {
-  float: right;
-  margin-top: 15px;
-}
-
 .ratings {
   margin-top: 15px;
 }
@@ -202,12 +187,34 @@
   font-weight: bold;
 }
 
-#author {
-  float: left;
-  color: gray;
-}
-
 #art_image {
   vertical-align: middle;
 }
 
+.results {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.row {
+  margin-bottom: 10px;
+}
+.title_box { 
+    border: 2px solid #E5E5E5;*/; 
+}
+
+a:visited {
+    color: #800080;
+}
+
+.title_box #title { 
+    position: relative; 
+    top : -0.5em;
+    margin-left: 1em;
+    display: inline; 
+    background-color: white; 
+}
+
+.title_box #content {
+  margin-left: 1em;
+}
