@@ -31,7 +31,7 @@ var limit = 20;
 var mObj = [];
 
 var main = function() {
-  localStorage.setItem("queue", JSON.stringify(moviesAdded));
+  // localStorage.setItem("queue", JSON.stringify(moviesAdded));
 
 	var div = '#movies';
   	$(div).append('<img src="loading.gif" id="loading-indicator" />');
@@ -134,17 +134,18 @@ var main = function() {
   $("#queue").on('click', '.rem', function(event) {
     var movie = $(this).parent();
     var movietext = $(this).next().next();
-    removeFromQueue(movie[0].innerText, movie);
+    var movieName = movie[0].innerText;
+    removeFromQueue(movieName.substr(1, movieName.length-2), movie);
   });
 }
 
 var removeFromQueue = function(movieName, movie) {
-  console.log(moviesAdded);
   movie.remove();
   
   $.each(moviesAdded, function(i, mov) {
-    if(mov.movieName===movieName) {
+    if(mov.movieName.toLowerCase()==movieName.toLowerCase()) {
       moviesAdded.splice(i, 1);
+      localStorage.setItem("queue", JSON.stringify(moviesAdded));
     }
   });
 }
