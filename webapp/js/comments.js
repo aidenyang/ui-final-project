@@ -36,7 +36,7 @@ var main = function() {
 
 	var div = '#movies';
   	$(div).append('<img src="loading.gif" id="loading-indicator" />');
-  	getRTReviews(apikeys[0]);
+  	getRTReviews(apikeys[0], 1);
 	if(typeof(Storage) !== "undefined")
 	  {
 	    if (localStorage.getItem("queue") !== null) {
@@ -57,7 +57,7 @@ var main = function() {
     mObj.length = 0;
     var div = '#movies';
     $(div).append('<img src="loading.gif" id="loading-indicator" />');
-    getRTReviews(apikeys[0]);
+    getRTReviews(apikeys[0], 1);
 	});
 }
 
@@ -614,7 +614,14 @@ function parseMovieNYT(i, JSON_movie)
 	      '</div>'+
 	    '</div>'+
 	  '</div>';
-  	$("#movies").append(contents);
+    if ($('#loadMore').length > 0)
+    {
+        $(contents).insertBefore('#loadMore');
+    }
+    else 
+    {
+       $("#movies").append(contents);
+    }
 }
 
 function parseMoviesRT(my_movie){
@@ -659,24 +666,45 @@ function parseMoviesRT(my_movie){
     	nytLink: "", id: movie_id});
 }
 
-function getRTReviews(param_apikey){
-  url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey='+ param_apikey;
+function getRTReviews(param_apikey, page){
+  page_limit = 16;
+  console.log('page' + page);
+  url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey='+ param_apikey + '&page=' + page;
+  if ($('#loadMore').length > 0)
+  { 
+    $('#loadMore').remove();
+  }
+  if ($('#loading-indicator').length == 0)
+  {
+    $('#movies').append('<img src="loading.gif" id="loading-indicator" />');
+  }
   $.ajax({
     'type' : "GET", 
     'url': url,
     'cache': true,
     'dataType': 'jsonp',
     'success': function(data, textStats, XMLHttpRequest){
-		console.log(data);
-		list_movies = data['movies'];
-		for(var i = 0; i < list_movies.length; i++)
-		{
-			parseMoviesRT(list_movies[i]);
-			getNYTReviews(i, nytkeys[i%3]);
-		}
-		console.log('2');
-		console.log(mObj[0]['trailer']);
-		$('#loading-indicator').remove();
+    console.log(data);
+    list_movies = data['movies'];
+    console.log(list_movies);
+    for(var i = 0; i < list_movies.length; i++)
+    {
+      parseMoviesRT(list_movies[i]);
+      index = ((page - 1) * page_limit) + i;
+      getNYTReviews(index, nytkeys[index%3]);
+    }
+    //Rona 
+    if (list_movies.length == page_limit)
+    {
+      page = page + 1;
+      param_apikey = "'" + param_apikey + "'";
+      var loading = '<div class="movie" id="loadMore">'+ 
+        '<button type="submit" class="btn btn-info" onclick="getRTReviews(' + param_apikey + ',' + page + ');">Load More Movies</button>' 
+        +'</div>';
+      console.log(loading);
+      $("#movies").append(loading); 
+    }
+    $('#loading-indicator').remove();
     }
   });
 }
