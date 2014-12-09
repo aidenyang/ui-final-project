@@ -85,9 +85,9 @@ var main = function() {
 
   $("#queue").on('click', '.rem', function(event) {
     var movie = $(this).parent();
-    var movietext = $(this).next().next();
+    var movietext = $(this).next().children()[1];
     var movieName = movie[0].innerText;
-    removeFromQueue(movieName.substr(1, movieName.length-2), movie);
+    removeFromQueue(movieName.substr(2, movieName.length-3), movie);
   });
 }
 
@@ -801,7 +801,7 @@ function addShowtimes(movies) {
       if ($('#' + theaterid).length == 0) {
         // add theater if isn't there
         var theaterhtml = '<div class="theater" id="' + theaterid + '">' +
-        '<b>' + theater + '</b>' + '</div>';
+        '<span id="panelHeading"><b>' + theater + '</b>' + '</span></div>';
         $('.showtimes').append(theaterhtml);
       }
       
@@ -809,7 +809,7 @@ function addShowtimes(movies) {
       var movieid = movie.replace(/[\.,-\/#!$'?%\^&\*;:{}=\-_`~()]/g,"").replace(/ /g,'');
       if ($('#' + theaterid + ' #' + movieid).length == 0) {
         var moviehtml = '<div class="smovie" id="' + movieid + '">' +
-        '<i>' + movie + '</i>' + '</div>';
+        '<span id="movieTitle">' + movie  + '</span></div>';
         $('#' + theaterid).append(moviehtml);
       }
 
