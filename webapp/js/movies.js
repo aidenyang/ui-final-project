@@ -125,7 +125,7 @@ var addToQueue = function(index, mObject) {
     $('#addtext').remove();
   } 
   if(moviesAdded.length+1 > 11) {
-    alert("Maximum number of movies allowed in queue is 11!");
+    alert("Maximum number of movies allowed in selection is 11!");
   }
 
   var fromStorage = 0;
@@ -242,7 +242,7 @@ var addToQueue = function(index, mObject) {
         $(".queueModals").append(modalString);
       }
       else if((prevSaved==1 || moviesAdded.indexOf(mObj[index])!=-1) && moviesAdded.length<11) {
-        alert("This movie is already added in your queue!");
+        alert("This movie is already added in your selection");
       }
 
     }
@@ -852,7 +852,7 @@ function searchShowtimes() {
     });
   }
   else if (moviesAdded.length == 0) {
-    stError("Please add movies to your movies first.");
+    stError("Please add movies to your movie selection first.");
   }
   else if (date == "") {
     stError("Please enter a date first.");
@@ -871,7 +871,11 @@ function stError(errormsg) {
 function addShowtimes(movies) {
   console.log(movies);
   $('.showtimes').empty();
-  
+  var movie_is_added = [];
+  for (var m = 0; m < moviesAdded.length; m++)
+  {
+    movie_is_added.push(0);
+  }
   for (var i = 0; i < movies.length; i++) 
   {
     for (var j = 0; j < movies[i].showtimes.length; j++) 
@@ -880,6 +884,8 @@ function addShowtimes(movies) {
       {
         if (movies[i].title.toLowerCase() == moviesAdded[k].movieName.toLowerCase()) 
         {
+          movie_is_added[k] = 1;
+          console.log(movie_is_added);
           var theater = movies[i].showtimes[j].theatre.name;
           var theaterid = theater.replace(/[\.,-\/#!'?$%\^&\*;:{}=\-_`~()]/g,"").replace(/ /g,'');
           if ($('#' + theaterid).length == 0) 
@@ -926,6 +932,17 @@ function addShowtimes(movies) {
   if ($('.showtimes').html() == "")
   {
     $('.showtimes').append('<h4> No results found :( </h4>');
+  }
+  else 
+  {
+    console.log(movie_is_added);
+    for (var i = 0; i < movie_is_added.length; i++)
+    {
+      if (movie_is_added[i] == 0)
+      {
+        $('.showtimes').prepend('<h5>' + moviesAdded[i].movieName + ' was not found in any theater. <br></h5>');
+      }
+    }
   }
 }
 
