@@ -58,6 +58,7 @@ var main = function() {
     var div = '#movies';
     $(div).append('<img src="loading.gif" id="loading-indicator" />');
     getRTReviews(apikeys[0], 1);
+    //console.log("hi");
 	});
 }
 
@@ -103,7 +104,7 @@ var addToQueue = function(index, mObject) {
 		var title = movie.movieName;
 		var imageUrl = movie.img;
 
-		var item="";
+		var item = "";
 		item += '<div class=\"qitem\" data-toggle="modal" data-target="#myModal'+i+'">';
 		item += "<img class=\"qimage\" src=\""+imageUrl+"\" \/>";
 		item += "<div class=\"qtext\">";
@@ -198,7 +199,7 @@ function getReviewsQueue(i) {
   if(!($(div).is(':empty'))) {
     return;
   }
-  i = i - queueOffset;
+  i = i - queueOffset-1;
   console.log(moviesAdded);
   console.log(moviesAdded[i]);
   var movie_id = moviesAdded[i]['id'];
@@ -312,10 +313,6 @@ function handle(e)
      searchMovies();
   }
 }
-
-$( ".qitem" ).mouseover(function() {
-  $( this ).css({'cursor': 'pointer'});
-});
 
 
 function searchMovies() {

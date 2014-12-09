@@ -4,6 +4,16 @@
   padding-bottom: 30px;
 }
 
+.qimage:hover {
+  cursor:pointer;
+  cursor:hand;
+}
+
+.qitem:hover {
+  cursor:pointer;
+  cursor:hand;
+}
+
 .navbar 
 {
   background-color: #F8F8F8;
@@ -12,6 +22,10 @@
 #logo{
     width:35px;
     height:35px;
+}
+
+#movieBrand {
+  margin-right: 10px;
 }
 
 .pop {
@@ -24,6 +38,10 @@
 
 #searchButton {
   margin-top: 8px;
+}
+
+#helpButton {
+  margin-top: 16px;
 }
 
 .start{
