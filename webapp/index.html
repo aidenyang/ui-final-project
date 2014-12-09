@@ -2,43 +2,40 @@
 <html lang="en">
 
 <head>
-  <title>Movies Raider</title>
-  <meta charset="utf-8"> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Bootstrap -->
-  <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-  <link rel="stylesheet" type="text/css" href="css/styles.css">
-  <link rel="stylesheet" type="text/css" href="css/movies.css">
 
-  <!-- Custom CSS -->
-  <link href="css/sb-admin-2.css" rel="stylesheet">
+	<title>Movies Raider</title>
+	<meta charset="utf-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/movies.css">
+
+    <!-- Custom CSS -->
+    <link href="css/sb-admin-2.css" rel="stylesheet">
 </head>
 
 <body>
-  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="#">
-          <img id="logo" src="images/movie-reel.jpg" class="img-responsive img-circle" alt="Responsive image">
-        </a>
-      </div>
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  		<div class="container">
+    		<div class="navbar-header">
+      			<a class="navbar-brand" href="#">
+        			<img id="logo" src="images/movie-reel.jpg" class="img-responsive img-circle" alt="Responsive image">
+      			</a>
+    		</div>
 
-      <div class="navbar-header navbar-left">
-        <button id="mostpop" type="submit" class="btn btn-danger pop">Most Popular</button>
+        <div class="navbar-header navbar-left">
+          <button id="mostpop" type="submit" class="btn btn-danger pop">Most Popular</button>
+        </div>
+      		
+        <div class="navbar-form navbar-left">
+          <input id="search" type="text" class="form-control" placeholder="Movie Title" onkeypress="handle(event)">
+          <button id="searchButton" type="submit" class="btn btn-primary" onclick="searchMovies();">Search</button>
+        </div>
+        <div id="queue" class="container"> <p id="inQueue"><b>Your Movies</b></p>
+        </div>
       </div>
-      
-      <div class="navbar-form navbar-left">
-        <input id="search" type="text" class="form-control" placeholder="Movie Title" onkeypress="handle(event)">
-        <button id="searchButton" type="submit" class="btn btn-primary" onclick="searchMovies();">Search</button>
-      </div>
-      <div id="queue" class="container"> <p id="inQueue"><b>Your Movies</b></p>
-      </div>
-    </div>
-  </nav>
-
-
-
-  
+	 </nav>
 
   <div class="container">
     
