@@ -282,12 +282,30 @@ function getReviewsQueue(i) {
           reviewsString = reviewsString + quote + " " + link + '<br>';
         }
       }
+      var c_string = "";
+      if(parseInt(moviesAdded[i]['criticsScore'])<=60) {
+        c_string = '<img src="rotten.png" alt="rotten" height="15" width="15">'+" "+moviesAdded[i]['criticsScore'] + "%";
+      } else {
+        c_string = '<img src="fresh.png" alt="fresh" height="15" width="15">'+" "+moviesAdded[i]['criticsScore'] + "%";
+      }
+      var a_string;
+      if(parseInt(moviesAdded[i]['audienceScore'])<=60) {
+        a_string = '<img src="rotten.png" alt="rotten" height="15" width="15">'+" "+moviesAdded[i]['audienceScore'] + "%";
+      } else {
+        a_string = '<img src="fresh.png" alt="fresh" height="15" width="15">'+" "+moviesAdded[i]['audienceScore'] + "%";
+      }
+      var t_string = "";
+      if(moviesAdded[i]['thousandsbest']==="Yes") {
+        t_string = moviesAdded[i]['thousandsbest']+" "+'<img src="check.png" alt="check mark" height="15" width="15">';
+      } else {
+        t_string = moviesAdded[i]['thousandsbest'];
+      }
       var contents= 
                 '<div class="Reviews">'+
                   '<div class="title_box" id="rotTom">'+
                       '<div id="title"><b>Rotten Tomatoes</b></div>'+
                       '<div id="content">'+
-                          '<p><b>Critics Score: </b>'+moviesAdded[i]['criticsScore']+'<b> Audience Score: </b>'+moviesAdded[i]['audienceScore']+
+                          '<p><b>Critics Score: </b>'+c_string+'<b> Audience Score: </b>'+a_string+
                           '<br><b>Selected Critics Reviews: </b><br>'+reviewsString+'</p>'+
                       '</div>'+
                   '</div>'+
@@ -295,7 +313,7 @@ function getReviewsQueue(i) {
                   '<div class="title_box" id="NYTTom">'+
                       '<div id="title"><b>New York Times Review</b></div>'+
                       '<div id="content">'+
-                          '<p><b>Thousands Best: </b>'+moviesAdded[i]['thousandsbest']+
+                          '<p><b>Thousands Best: </b>'+t_string+
                           '<br><b>Review: </b>'+'<a href="'+moviesAdded[i]['nytLink']+'">'+moviesAdded[i]['nytTitle']+'</a>'+
                           '<br>"'+moviesAdded[i]['nytreview']+'"'+
                           '</p>'+
@@ -310,10 +328,10 @@ function getReviewsQueue(i) {
 function parseMovie(i)
 {
   var JSON_movie = movies[i];
-  var thousand_best = 'N';
+  var thousand_best = 'No';
   if (JSON_movie['thousand_best'] && JSON_movie['thousand_best'] == 1)
   {
-    thousand_best = 'Y';
+    thousand_best = 'Yes';
   }
   var title = JSON_movie['headline'];
   var review_url = JSON_movie['link']['url'];
@@ -540,12 +558,30 @@ function getReviews(i) {
           reviewsString = reviewsString + quote + " " + link + '<br>';
         }
       }
+      var c_string = "";
+      if(parseInt(mObj[i]['criticsScore'])<=60) {
+        c_string = '<img src="rotten.png" alt="rotten" height="15" width="15">'+" "+mObj[i]['criticsScore'] + "%";
+      } else {
+        c_string = '<img src="fresh.png" alt="rotten" height="15" width="15">'+" "+mObj[i]['criticsScore'] + "%";
+      }
+      var a_string;
+      if(parseInt(mObj[i]['audienceScore'])<=60) {
+        a_string = '<img src="rotten.png" alt="rotten" height="15" width="15">'+" "+mObj[i]['audienceScore'] + "%";
+      } else {
+        a_string = '<img src="fresh.png" alt="rotten" height="15" width="15">'+" "+mObj[i]['audienceScore'] + "%";
+      }
+      var t_string = "";
+      if(mObj[i]['thousandsbest']==="Yes") {
+        t_string = mObj[i]['thousandsbest']+" "+'<img src="check.png" alt="check mark" height="15" width="15">';
+      } else {
+        t_string = mObj[i]['thousandsbest'];
+      }
       var contents= 
                 '<div class="Reviews">'+
                   '<div class="title_box" id="rotTom">'+
                       '<div id="title"><b>Rotten Tomatoes</b></div>'+
                       '<div id="content">'+
-                          '<p><b>Critics Score: </b>'+mObj[i]['criticsScore']+'<b> Audience Score: </b>'+mObj[i]['audienceScore']+
+                          '<p><b>Critics Score: </b>'+c_string+'<b> Audience Score: </b>'+a_string+
                           '<br><b>Selected Critics Reviews: </b><br>'+reviewsString+'</p>'+
                       '</div>'+
                   '</div>'+
@@ -553,7 +589,7 @@ function getReviews(i) {
                   '<div class="title_box" id="NYTTom">'+
                       '<div id="title"><b>New York Times Review</b></div>'+
                       '<div id="content">'+
-                          '<p><b>Thousands Best: </b>'+mObj[i]['thousandsbest']+
+                          '<p><b>Thousands Best: </b>'+t_string+
                           '<br><b>Review: </b>'+'<a href="'+mObj[i]['nytLink']+'">'+mObj[i]['nytTitle']+'</a>'+
                           '<br>"'+mObj[i]['nytreview']+'"'+
                           '</p>'+
@@ -589,10 +625,10 @@ function getNYTReviews(j, apikey)
 
 function parseMovieNYT(i, JSON_movie)
 {
-  var thousand_best = 'N';
+  var thousand_best = 'No';
   if (JSON_movie['thousand_best'] && JSON_movie['thousand_best'] == 1)
   {
-    thousand_best = 'Y';
+    thousand_best = 'Yes';
   }
   var title = JSON_movie['headline'];
   var review_url = JSON_movie['link']['url'];
