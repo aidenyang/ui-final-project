@@ -104,7 +104,7 @@ var removeFromQueue = function(movieName, movie) {
     }
 
   });
-  var newName = movieName.replace(/\./g,'').replace(/ /g,"_");
+  var newName = movieName.replace(/[\.,-\/#!'?$%\^&\*;:{}=\-_`~()]/g,"").replace(/ /g,'');
   console.log(newName);
   if(index>-1) {
     moviesAdded.splice(index, 1);
@@ -156,7 +156,7 @@ var addToQueue = function(index, mObject) {
     moviesAdded[moviesAdded.length]=movie;
 
     var title = movie.movieName;
-    var newName = movie.movieName.replace(/\./g,'').replace(/ /g,"_");
+    var newName = movie.movieName.replace(/[\.,-\/#!'?$%\^&\*;:{}=\-_`~()]/g,"").replace(/ /g,'');
     console.log(newName);
 
      // if(title.length>25) {
