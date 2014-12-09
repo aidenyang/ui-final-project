@@ -93,14 +93,25 @@ var main = function() {
 
 var removeFromQueue = function(movieName, movie) {
   movie.remove();
+  // console.log(moviesAdded);
+  var index = -1;
   
   $.each(moviesAdded, function(i, mov) {
+    console.log(mov);
+
     if(mov.movieName.toLowerCase()==movieName.toLowerCase()) {
-      moviesAdded.splice(i, 1);
-      localStorage.setItem("queue", JSON.stringify(moviesAdded));
+      index = i;
     }
 
   });
+
+  if(index>-1) {
+    moviesAdded.splice(index, 1);
+    localStorage.setItem("queue", JSON.stringify(moviesAdded));
+    console.log(index);
+    index++;
+    $("#myModal"+index).remove();
+  }
 }
 
 var addToQueue = function(index, mObject) {
@@ -118,7 +129,7 @@ var addToQueue = function(index, mObject) {
 	}
 	else {
 		$.each(moviesAdded, function(i, data) {
-			if(data.movieName===mObj[index].movieName) {
+			if(data.movieName.toLowerCase()===mObj[index].movieName.toLowerCase()) {
 				prevSaved = 1;
 			}
 		});
@@ -137,8 +148,13 @@ var addToQueue = function(index, mObject) {
 		//save movie added
 	   moviesAdded[moviesAdded.length]=movie;
 
+     var title = movie.movieName;
+     
+     // if(title.length>25) {
+     //  title = title.substr(0,25)+"...";
+     // }
 
-		var title = movie.movieName;
+		
 		var imageUrl = movie.img;
     var i = moviesAdded.length;
     var j = i+queueOffset;
@@ -218,6 +234,7 @@ var addToQueue = function(index, mObject) {
     '</div>';
 
     $(".queueModals").append(modalString);
+    console.log(moviesAdded);
 }
 
 function getReviewsQueue(i) {

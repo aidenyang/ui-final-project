@@ -105,7 +105,7 @@
   text-align: center;
   font-size: 80%;
   overflow: hidden;
-  height: 40px;
+  height: 45px;
 }
 
 .movie {
@@ -113,15 +113,15 @@
 }
 
 #movies {
-  margin-top: -60px;
+  margin-top: 170px;
 }
 
 .qitem {
   background-color: white;
   display: inline-block;
-  height: 120px;
-  top: 20px;
+  height: 128px;
   position: relative;
+  top: 10px;
   margin-left: 15px;
   width: 80px;
 }
@@ -168,7 +168,7 @@
 .chat-panel {
   width:  300px;
   height: 600px;
-  margin-top: -10px;
+  margin-top: 230px;
 }
 
 .smovie {
