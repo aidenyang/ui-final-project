@@ -100,12 +100,13 @@ var removeFromQueue = function(movieName, movie) {
     }
 
   });
-
+  var newName = movieName.replace(/\./g,'').replace(/ /g,"_");
+  console.log(newName);
   if(index>-1) {
     moviesAdded.splice(index, 1);
     localStorage.setItem("queue", JSON.stringify(moviesAdded));
     index++;
-    $("#myModal"+index).remove();
+    $("#myModal"+newName).remove();
   }
 }
 
@@ -144,6 +145,8 @@ var addToQueue = function(index, mObject) {
 	   moviesAdded[moviesAdded.length]=movie;
 
      var title = movie.movieName;
+     var newName = movie.movieName.replace(/\./g,'').replace(/ /g,"_");
+     console.log(newName);
      
      // if(title.length>25) {
      //  title = title.substr(0,25)+"...";
@@ -159,7 +162,7 @@ var addToQueue = function(index, mObject) {
     item += "<button type=\"button\" class=\"btn btn-danger btn-circle rem\" aria-label=\"Left Align\">";
     item += "<span class=\"glyphicon glyphicon-remove-sign\" aria-hidden=\"true\"><\/span>";
     item += "<\/button>";
-    item += "<div data-toggle='modal' data-target=\"#myModal"+i+"\">";
+    item += "<div data-toggle='modal' data-target=\"#myModal"+newName+"\">";
 		item += "<img class=\"qimage\" src=\""+imageUrl+"\" \/>";
 		item += "<div class=\"qtext\">";
 		item += title;
@@ -208,7 +211,7 @@ var addToQueue = function(index, mObject) {
         // '</div>';
 
     var modalString = 
-    '<div class="modal fade" id="myModal'+i+'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
+    '<div class="modal fade" id="myModal'+newName+'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
       '<div class="modal-dialog">'+
         '<div class="modal-content">'+
           '<div class="modal-header">'+
