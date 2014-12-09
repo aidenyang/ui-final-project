@@ -51,6 +51,10 @@ var main = function() {
       if (localStorage.getItem("queue") !== null) {
         var queue = JSON.parse(localStorage.getItem("queue"));
         var i;
+        if (queue.length == 0)
+        {
+          $('#queue').append('<h4 id="addtext"><center>Add movies to selection.</center></h4>');
+        }
         for(i=0; i<queue.length; i++) {
           addToQueue(null, queue[i]);
         }
@@ -107,11 +111,18 @@ var removeFromQueue = function(movieName, movie) {
     index++;
     $("#myModal"+index).remove();
   }
+  if (moviesAdded.length == 0)
+  {
+    $('#queue').append('<h4 id="addtext"><center>Add movies to selection.<center></h4>');
+  }
 }
 
 var addToQueue = function(index, mObject) {
 
-
+  if ($('#addtext').length > 0)
+  {
+    $('#addtext').remove();
+  } 
 	if(moviesAdded.length+1 > 11) {
 		alert("Maximum number of movies allowed in queue is 11!");
 	}
