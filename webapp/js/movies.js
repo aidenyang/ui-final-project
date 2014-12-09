@@ -748,7 +748,7 @@ function searchShowtimes() {
   if (zip != "") {
     localStorage.setItem("zip", zip);
   }
-  if ($('#search').val() != "" && date != "" && zip != "") {
+  if (moviesAdded.length > 0 && date != "" && zip != "") {
     var request = $.ajax({
       url: 'http://data.tmsapi.com/v1/movies/showings?startDate=' + date + '&zip=' + zip + '&radius=10&api_key=' + showtimekey,
       type: 'GET',
@@ -758,7 +758,7 @@ function searchShowtimes() {
       complete: function() { $('#st-loading').remove(); },
       success: function(data) {
 
-        addShowtimes($('#search').val(), data);
+        addShowtimes(data);
       },
       error: function(request, status, error) {
         var err = JSON.parse(request.responseText);
@@ -771,8 +771,8 @@ function searchShowtimes() {
       }
     });
   }
-  else if ($('#search').val() == "") {
-    stError("Please enter a movie above first.");
+  else if (moviesAdded.length == 0) {
+    stError("Please add movies to your movies first.");
   }
   else if (date == "") {
     stError("Please enter a date first.");
@@ -788,54 +788,64 @@ function stError(errormsg) {
   $('.showtimes').append(html);
 }
 
-function addShowtimes(query, movies) {
+function addShowtimes(movies) {
+  console.log(movies);
   $('.showtimes').empty();
   
-  for (var i = 0; i < movies.length; i++) {
-    for (var j = 0; j < movies[i].showtimes.length; j++) {
-      if (movies[i].title.toLowerCase() == query.toLowerCase()) {
-      var theater = movies[i].showtimes[j].theatre.name;
-      var theaterid = theater.replace(/[\.,-\/#!'?$%\^&\*;:{}=\-_`~()]/g,"").replace(/ /g,'');
-      if ($('#' + theaterid).length == 0) {
-        // add theater if isn't there
-        var theaterhtml = '<div class="theater" id="' + theaterid + '">' +
-        '<span id="panelHeading"><b>' + theater + '</b>' + '</span></div>';
-        $('.showtimes').append(theaterhtml);
-      }
-      
-      var movie = movies[i].title;
-      var movieid = movie.replace(/[\.,-\/#!$'?%\^&\*;:{}=\-_`~()]/g,"").replace(/ /g,'');
-      if ($('#' + theaterid + ' #' + movieid).length == 0) {
-        var moviehtml = '<div class="smovie" id="' + movieid + '">' +
-        '<span id="movieTitle">' + movie  + '</span></div>';
-        $('#' + theaterid).append(moviehtml);
-      }
+  for (var i = 0; i < movies.length; i++) 
+  {
+    for (var j = 0; j < movies[i].showtimes.length; j++) 
+    {
+      for (var k = 0; k < moviesAdded.length; k++)
+      {
+        if (movies[i].title.toLowerCase() == moviesAdded[k].movieName.toLowerCase()) 
+        {
+          var theater = movies[i].showtimes[j].theatre.name;
+          var theaterid = theater.replace(/[\.,-\/#!'?$%\^&\*;:{}=\-_`~()]/g,"").replace(/ /g,'');
+          if ($('#' + theaterid).length == 0) 
+          {
+            // add theater if isn't there
+            var theaterhtml = '<div class="theater" id="' + theaterid + '">' +
+            '<span id="panelHeading"><b>' + theater + '</b>' + '</span></div>';
+            $('.showtimes').append(theaterhtml);
+          }
+          
+          var movie = movies[i].title;
+          var movieid = movie.replace(/[\.,-\/#!$'?%\^&\*;:{}=\-_`~()]/g,"").replace(/ /g,'');
+          if ($('#' + theaterid + ' #' + movieid).length == 0) {
+            var moviehtml = '<div class="smovie" id="' + movieid + '">' +
+            '<span id="movieTitle">' + movie  + '</span></div>';
+            $('#' + theaterid).append(moviehtml);
+          }
 
-      var datetime = movies[i].showtimes[j].dateTime;
-      var ticketuri = movies[i].showtimes[j].ticketURI;
-      var timearr = datetime.split("T");
-      var time = timearr[1];
-      var hmarr = time.split(":");
-      var hours = hmarr[0];
-      var minutes = hmarr[1];
-      var showtimehtml = "";
-      var time = formatTime(hours, minutes);
-      if (ticketuri === undefined) {
-        showtimehtml = '<div class="showtime">' +
-        time + '</div>';
-      }
-
-      else {
-        showtimehtml = '<div class="showtime">' + '<a target="_blank" href="' + ticketuri + '">' +
-        time + '</a></div>';
-      }
-      
-      $('#' + theaterid + ' #' + movieid).append(showtimehtml);
-        if (showtimehtml == "") {
-          sterror("No results were found. Try again.");
+          var datetime = movies[i].showtimes[j].dateTime;
+          var ticketuri = movies[i].showtimes[j].ticketURI;
+          var timearr = datetime.split("T");
+          var time = timearr[1];
+          var hmarr = time.split(":");
+          var hours = hmarr[0];
+          var minutes = hmarr[1];
+          var showtimehtml = "";
+          var time = formatTime(hours, minutes);
+          if (ticketuri === undefined) 
+          {
+            showtimehtml = '<div class="showtime">' +
+            time + '</div>';
+          }
+          else 
+          {
+            showtimehtml = '<div class="showtime">' + '<a target="_blank" href="' + ticketuri + '">' +
+            time + '</a></div>';
+          }
+        
+          $('#' + theaterid + ' #' + movieid).append(showtimehtml);
         }
       }
     }
+  }
+  if ($('.showtimes').html() == "")
+  {
+    $('.showtimes').append('<h4> No results found :( </h4>');
   }
 }
 
