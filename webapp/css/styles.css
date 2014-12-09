@@ -152,8 +152,9 @@
 
 .chat-panel {
   width:  300px;
-  height: 600px;
+  height: 400px;
   margin-top: 230px;
+  overflow: hidden;
 }
 
 .smovie {
@@ -197,6 +198,7 @@
 
 #stresults {
   margin-top: 8px;
+  overflow: auto;
 }
 
 #source {
