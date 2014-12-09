@@ -141,17 +141,19 @@ var addToQueue = function(index, mObject) {
 		var title = movie.movieName;
 		var imageUrl = movie.img;
     var i = moviesAdded.length;
-    var j = i+queueOffset; 
+    var j = i+queueOffset;
 
     var item="";
-    item += "<div class=\"qitem\" data-toggle='modal' data-target=\"#myModal"+i+"\">";
+    item += "<div class=\"qitem\">";
     item += "<button type=\"button\" class=\"btn btn-danger btn-circle rem\" aria-label=\"Left Align\">";
     item += "<span class=\"glyphicon glyphicon-remove-sign\" aria-hidden=\"true\"><\/span>";
     item += "<\/button>";
+    item += "<div data-toggle='modal' data-target=\"#myModal"+i+"\">";
 		item += "<img class=\"qimage\" src=\""+imageUrl+"\" \/>";
 		item += "<div class=\"qtext\">";
 		item += title;
 		item += "<\/div>";
+    item += "<\/div>";
 		item += "<\/div>";
 
 		$("#queue").append(item);
