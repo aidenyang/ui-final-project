@@ -1,6 +1,6 @@
 #logo{
-    width:35px;
-    height:35px;
+  width:35px;
+  height:35px;
 }
 
 .pop {
@@ -67,45 +67,46 @@
 
 /*.qitem:hover {
   background-color: gray;
-}*/
+  }*/
 
-.panel-horizontal .panel-heading {
-       float: left;
-       width: 19%;
-       padding-left: 15px;
 
-       border-right: 15px;
-       border-top-right-radius: 0;
-       margin-bottom: 0;
-}
+  .panel-horizontal .panel-heading {
+   float: left;
+   width: 19%;
+   padding-left: 15px;
 
-.panel-horizontal .panel-body {
-       float: right;
-       margin: 0 0 15px 0;
-       padding-bottom: 0;
-       width: 80%;
-       padding: 0;
-}
+   border-right: 15px;
+   border-top-right-radius: 0;
+   margin-bottom: 0;
+ }
 
-.article_modal {
-	float: right;
-	margin-top: 15px;
-}
+ .panel-horizontal .panel-body {
+   float: right;
+   margin: 0 0 15px 0;
+   padding-bottom: 0;
+   width: 80%;
+   padding: 0;
+ }
 
-.ratings {
-	margin-top: 15px;
-}
+ .article_modal {
+   float: right;
+   margin-top: 15px;
+ }
 
-.userId {
-    display: none;
+ .ratings {
+   margin-top: 15px;
+ }
+
+ .userId {
+  display: none;
 }
 
 #prototype, #rating_prototype {
-    display: none;
+  display: none;
 }
 
 .nl {
-    visibility: hidden;
+  visibility: hidden;
 }
 
 .chat-panel {
@@ -114,12 +115,35 @@
   margin-top: 180px;
 }
 
-.panel-body {
+.smovie {
+  margin-left: 15px;
+  padding: 5px;
+}
 
+.showtime {
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+.theater {
+  padding: 5px;
+  border: 1px solid black;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.theater b:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 #source {
 	font-weight: bold;
+}
+
+#stresults {
+  margin-top: 8px;
 }
 
 #author {
@@ -129,4 +153,33 @@
 
 #art_image {
 	vertical-align: middle;
+}
+
+
+/** accordion styles **/
+
+.accordion {
+  margin: 50px;
+}
+.accordion dt, .accordion dd {
+  padding: 10px;
+  border: 1px solid black;
+  border-bottom: 0;
+}
+.accordion dt:last-of-type, .accordion dd:last-of-type {
+  border-bottom: 1px solid black;
+}
+.accordion dt a, .accordion dd a {
+  display: block;
+  color: black;
+  font-weight: bold;
+}
+.accordion dd {
+  border-top: 0;
+  font-size: 12px;
+}
+.accordion dd:last-of-type {
+  border-top: 1px solid white;
+  position: relative;
+  top: -1px;
 }
